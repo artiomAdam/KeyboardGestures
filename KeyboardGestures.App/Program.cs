@@ -1,5 +1,7 @@
 ﻿using System;
 using Avalonia;
+using KeyboardGestures.Core.Gestures;
+using KeyboardGestures.Core.KeyboardHook;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace KeyboardGestures.App
@@ -13,9 +15,17 @@ namespace KeyboardGestures.App
         [STAThread]
         public static void Main(string[] args)
         {
-            ConfigureServices();
-            BuildAvaloniaApp()
-                .StartWithClassicDesktopLifetime(args);
+            BuildAvaloniaApp().AfterSetup( _ =>
+                    {
+                        ConfigureServices();
+                        var hook = Services.GetRequiredService<IKeyboardHookService>();
+                        var interpreter = Services.GetRequiredService<IGestureInterpreter>();
+
+                        hook.KeyEventReceived += interpreter.OnKeyEvent;
+                        hook.Start();
+                    }
+                
+                ).StartWithClassicDesktopLifetime(args);
         }
 
         public static void ConfigureServices()
@@ -26,6 +36,8 @@ namespace KeyboardGestures.App
             // e.g services.AddSingleton<IGestutureCommandExecutionService, GestureCommandExecutionService>();
             // or services.AddSingleton<OverlayViewModel>();
 
+            services.AddSingleton<IKeyboardHookService, WindowsKeyboardHookService>();
+            services.AddSingleton<IGestureInterpreter, GestureInterpreter>();
 
 
             Services = services.BuildServiceProvider();

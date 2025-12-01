@@ -45,11 +45,6 @@
 			<Setter Property="BorderThickness" Value="1"/>
 		</Style>
 
-		<!-- Disabled state (if you ever use it) -->
-		<Style Selector="Button.tray-menu-button:disabled">
-			<Setter Property="Foreground" Value="#888888"/>
-			<Setter Property="Background" Value="Transparent"/>
-		</Style>
 	</Window.Styles>
 
 	<Border Background="#F2F2F2"
@@ -67,8 +62,7 @@
 
 			<!-- Separator -->
 			<Border Height="1"
-                    Margin="0,4"
-                    Background="#DDDDDD"/>
+                    Background="#CCCCCC"/>
 
 			<!-- Quit -->
 			<Button Content="Quit"
