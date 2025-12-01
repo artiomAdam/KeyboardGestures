@@ -1,5 +1,6 @@
 ﻿using System;
 using Avalonia;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace KeyboardGestures.App
 {
@@ -12,8 +13,22 @@ namespace KeyboardGestures.App
         [STAThread]
         public static void Main(string[] args)
         {
+            ConfigureServices();
             BuildAvaloniaApp()
                 .StartWithClassicDesktopLifetime(args);
+        }
+
+        public static void ConfigureServices()
+        {
+            var services = new ServiceCollection();
+
+            // add dependencies here:
+            // e.g services.AddSingleton<IGestutureCommandExecutionService, GestureCommandExecutionService>();
+            // or services.AddSingleton<OverlayViewModel>();
+
+
+
+            Services = services.BuildServiceProvider();
         }
 
         // Avalonia configuration, don't remove; also used by visual designer.
