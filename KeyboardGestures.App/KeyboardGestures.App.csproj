@@ -6,6 +6,7 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,8 +23,11 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<Content Include="Assets\**">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
+		<AvaloniaResource Include="Assets/Icon.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\KeyboardGestures.Core\KeyboardGestures.Core.csproj" />
+	  <ProjectReference Include="..\KeyboardGestures.UI\KeyboardGestures.UI.csproj" />
 	</ItemGroup>
 </Project>

@@ -1,6 +1,11 @@
 <Application xmlns="https://github.com/avaloniaui"             
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="KeyboardGestures.App.App">
-    <Application.DataTemplates>
-    </Application.DataTemplates>
+	<TrayIcon.Icons>
+		<TrayIcons>
+			<TrayIcon Icon="avares://KeyboardGestures.App/Assets/Icon.png"
+					  ToolTipText="Keyboard Gestures"
+					  Clicked ="OnTrayClicked"/>
+		</TrayIcons>
+	</TrayIcon.Icons>
 </Application>

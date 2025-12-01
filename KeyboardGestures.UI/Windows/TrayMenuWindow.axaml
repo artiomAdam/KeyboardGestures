@@ -1,0 +1,81 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        x:Class="KeyboardGestures.UI.Windows.TrayMenuWindow"
+        Width="170"
+		Height="80"
+        SizeToContent="Height"
+        Title="TrayMenuWindow"
+        Topmost="True"
+        SystemDecorations="None"
+        CanResize="False"
+        Background="Transparent"
+        TransparencyLevelHint="AcrylicBlur">
+
+	<!-- Local styles for the tray menu -->
+	<Window.Styles>
+		<!-- Base style for tray buttons -->
+		<Style Selector="Button.tray-menu-button">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="BorderBrush" Value="Transparent"/>
+			<Setter Property="BorderThickness" Value="0"/>
+			<Setter Property="Foreground" Value="#222222"/>
+			<Setter Property="Padding" Value="8 4"/>
+			<Setter Property="HorizontalContentAlignment" Value="Left"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="FontSize" Value="13"/>
+			<Setter Property="FontWeight" Value="Normal"/>
+		</Style>
+
+		<!-- Hover -->
+		<Style Selector="Button.tray-menu-button:pointerover">
+			<Setter Property="Background" Value="#D6D6D6"/>
+		</Style>
+
+		<!-- Pressed -->
+		<Style Selector="Button.tray-menu-button:pressed">
+			<Setter Property="Background" Value="#C4C4C4"/>
+		</Style>
+
+		<!-- Keyboard focus outline -->
+		<Style Selector="Button.tray-menu-button:focusvisible">
+			<Setter Property="BorderBrush" Value="#4A90E2"/>
+			<Setter Property="BorderThickness" Value="1"/>
+		</Style>
+
+		<!-- Disabled state (if you ever use it) -->
+		<Style Selector="Button.tray-menu-button:disabled">
+			<Setter Property="Foreground" Value="#888888"/>
+			<Setter Property="Background" Value="Transparent"/>
+		</Style>
+	</Window.Styles>
+
+	<Border Background="#F2F2F2"
+            CornerRadius="6"
+            Padding="6"
+            BoxShadow="0 4 14 0 #00000066">
+
+		<StackPanel Spacing="4">
+
+			<!-- Settings -->
+			<Button Content="Settings"
+                    Classes="tray-menu-button"
+                    HorizontalAlignment="Stretch"
+                    Click="OnSettingsClick"/>
+
+			<!-- Separator -->
+			<Border Height="1"
+                    Margin="0,4"
+                    Background="#DDDDDD"/>
+
+			<!-- Quit -->
+			<Button Content="Quit"
+                    Classes="tray-menu-button"
+                    HorizontalAlignment="Stretch"
+                    Click="OnQuitClick"/>
+
+		</StackPanel>
+	</Border>
+</Window>
