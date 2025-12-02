@@ -1,0 +1,10 @@
+[
+  {
+    "Sequence": [ 32 ],
+    "ActionId": "ShowOverlay"
+  },
+  {
+    "Sequence": [ 67, 80 ],
+    "ActionId": "LaunchApp"
+  }
+]

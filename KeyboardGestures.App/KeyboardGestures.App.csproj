@@ -30,4 +30,8 @@
 	  <ProjectReference Include="..\KeyboardGestures.Core\KeyboardGestures.Core.csproj" />
 	  <ProjectReference Include="..\KeyboardGestures.UI\KeyboardGestures.UI.csproj" />
 	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="Resources\commands.json" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
 </Project>

@@ -6,7 +6,7 @@ namespace KeyboardGestures.Core.Gestures
 {
     public class GestureInterpreter : IGestureInterpreter
     {
-        private const int VK_CONTROL = 0xA2;
+        private const int VK_CONTROL = 0x11;
 
         private bool _ctrlDown = false;
         private readonly List<int> _sequence = new();
@@ -27,7 +27,8 @@ namespace KeyboardGestures.Core.Gestures
 
         private void HandleKeyDown(int vk)
         {
-            if(vk == VK_CONTROL)
+            vk = NormalizeCtrl(vk);
+            if (vk == VK_CONTROL)
             {
                 if(!_ctrlDown)
                 {
@@ -45,6 +46,7 @@ namespace KeyboardGestures.Core.Gestures
 
         private void HandleKeyUp(int vk)
         {
+            vk = NormalizeCtrl(vk);
             if(vk == VK_CONTROL)
             {
                 if(_ctrlDown)
@@ -63,6 +65,11 @@ namespace KeyboardGestures.Core.Gestures
             Debug.WriteLine($"Sequence COMPLETE: [{string.Join(", ", seq)}]");
 
             SequenceCompleted?.Invoke( seq );
+        }
+
+        private static int NormalizeCtrl(int vk)
+        {
+            return (vk == 0xA2 || vk == 0xA3) ? 0x11 : vk;
         }
     }
 }

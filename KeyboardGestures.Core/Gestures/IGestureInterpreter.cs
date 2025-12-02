@@ -10,5 +10,6 @@ namespace KeyboardGestures.Core.Gestures
     public interface IGestureInterpreter
     {
         void OnKeyEvent(KeyEvent ev);
+        public event Action<List<int>>? SequenceCompleted;
     }
 }
