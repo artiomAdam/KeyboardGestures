@@ -10,16 +10,27 @@ namespace KeyboardGestures.Core.Commands
 
             switch(cmd.CommandType)
             {
-                case "LaunchApp":
-                    Debug.WriteLine("Launch an app");
-                    // TODO: launch app
-                    break;
-                case "ShowOverlay":
-                    Debug.WriteLine("Show an overlay");
-                    // TODO: show the overlay window
-                    break;
-                case "CopyPath":
-                    // TODO: copy the path to current directory
+                case CommandType.LaunchApp:
+                {
+                    if(!string.IsNullOrWhiteSpace(cmd.ApplicationPath))
+                    {
+                        try
+                        {
+                            Process.Start(new ProcessStartInfo
+                            {
+                                FileName = cmd.ApplicationPath,
+                                UseShellExecute = true
+                            });
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine($"Failed to launch: {ex}");
+                        }
+                    }
+                    else
+                    {
+                        Debug.WriteLine("LaunchApp called with no ApplicationPath");
+                    }
                     break;
                 }
                 

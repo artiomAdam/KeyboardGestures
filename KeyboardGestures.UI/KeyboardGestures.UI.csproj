@@ -11,6 +11,10 @@
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.9" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\KeyboardGestures.Core\KeyboardGestures.Core.csproj" />
+  </ItemGroup>
+
 	
 
 </Project>

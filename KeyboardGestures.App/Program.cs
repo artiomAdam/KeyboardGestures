@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
-using Avalonia;
+﻿using Avalonia;
 using KeyboardGestures.Core.Commands;
 using KeyboardGestures.Core.Gestures;
 using KeyboardGestures.Core.KeyboardHook;
+using KeyboardGestures.UI.ViewModels;
+using KeyboardGestures.UI.Windows;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace KeyboardGestures.App
 {
@@ -25,6 +29,23 @@ namespace KeyboardGestures.App
                         var hook = Services.GetRequiredService<IKeyboardHookService>();
                         var interpreter = Services.GetRequiredService<IGestureInterpreter>();
                         var handler = Services.GetRequiredService<GestureHandler>();
+
+                        OverlayWindow? overlay = null;
+
+                        handler.OverlayShouldOpen += () =>
+                        {
+                            if (overlay == null)
+                            {
+                                overlay = Services.GetRequiredService<OverlayWindow>();
+                                overlay.Show();
+                            }
+                        };
+
+                        handler.OverlayShouldClose += () =>
+                        {
+                            overlay?.Hide();
+                            overlay = null;
+                        };
 
                         hook.KeyEventReceived += interpreter.OnKeyEvent;
                         hook.Start();
@@ -46,7 +67,12 @@ namespace KeyboardGestures.App
             if(File.Exists(jsonPath))
             {
                 var json = File.ReadAllText(jsonPath);
-                var cmds = JsonSerializer.Deserialize<List<CommandDefinition>>(json);
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    Converters = { new JsonStringEnumConverter() }
+                };
+                var cmds = JsonSerializer.Deserialize<List<CommandDefinition>>(json, options);
                 if(cmds != null)
                 {
                     foreach (var cmd in cmds)
@@ -58,7 +84,10 @@ namespace KeyboardGestures.App
 
             services.AddSingleton<ICommandExecutor, CommandExecutor>();
             services.AddSingleton<GestureHandler>();
-            
+
+
+            services.AddTransient<OverlayViewModel>();
+            services.AddTransient<OverlayWindow>();
 
 
             Services = services.BuildServiceProvider();

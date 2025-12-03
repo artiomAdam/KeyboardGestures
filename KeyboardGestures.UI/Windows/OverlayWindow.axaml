@@ -1,0 +1,50 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        x:Class="KeyboardGestures.UI.Windows.OverlayWindow"
+        Width="360"
+        Height="300"
+        CanResize="False"
+        Background="Transparent"
+        SystemDecorations="None"
+        Topmost="True"
+        WindowStartupLocation="CenterScreen"
+		CornerRadius="20"
+		TransparencyLevelHint="AcrylicBlur">
+
+	<Border Background="#00333333"
+            CornerRadius="20"
+            Padding="16"
+			Width="380"
+			Height="320">
+
+		<!-- FIX: Border MUST have a single container child -->
+		<StackPanel Spacing="12">
+
+			<TextBlock Text="Command Mode"
+                       Foreground="White"
+                       FontSize="20"
+                       HorizontalAlignment="Center"/>
+
+			<ItemsControl Background ="#BA7ADA" ItemsSource="{Binding Commands}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<StackPanel  Orientation="Horizontal" Spacing="10">
+							<TextBlock Text="{Binding SequenceText}"
+                                       Foreground="#FF00D4FF"
+                                       FontWeight="Bold"
+                                       FontSize="16"/>
+							<TextBlock Text="{Binding Description}"
+                                       Foreground="White"
+                                       FontSize="16"/>
+						</StackPanel>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+
+		</StackPanel>
+
+	</Border>
+</Window>

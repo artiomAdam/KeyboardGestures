@@ -1,9 +1,4 @@
 ﻿using KeyboardGestures.Core.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KeyboardGestures.Core.Gestures
 {
@@ -11,5 +6,7 @@ namespace KeyboardGestures.Core.Gestures
     {
         void OnKeyEvent(KeyEvent ev);
         public event Action<List<int>>? SequenceCompleted;
+        public event Action? OverlayActivated;
+        public event Action? OverlayDeactivated;
     }
 }

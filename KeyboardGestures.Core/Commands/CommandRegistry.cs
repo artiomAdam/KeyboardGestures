@@ -21,5 +21,17 @@
             => _commands.TryGetValue(MakeKey(seq), out var cmd) ? cmd : null;
 
         public IEnumerable<CommandDefinition> GetAll() => _commands.Values;
+
+        public IEnumerable<DisplayCommand> GetDisplayCommands()
+        {
+            foreach(var cmd in _commands.Values)
+            {
+                yield return new DisplayCommand
+                {
+                    SequenceText = string.Join(" ", cmd.Sequence.Select(x => x.ToString("X2"))),
+                    Description = CommandDescriptionHelper.GetDescription(cmd)
+                };
+            }
+        }
     }
 }
