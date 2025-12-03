@@ -1,27 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace KeyboardGestures.Core.Commands
+﻿namespace KeyboardGestures.Core.Commands
 {
     public class CommandRegistry
     {
+        /*
+            each command is saved as commandString : CommandDefinition, where the 
+            commandString is the sequence with "-"
+            e.g: command "ctrl->x->y" is just "x-y": {CommandDefinition}
+         */
         private readonly Dictionary<string, CommandDefinition> _commands = new();
 
         private static string MakeKey(List<int> seq) => string.Join("-", seq);
 
-        public void Register(CommandDefinition cmd)
+        public bool Register(CommandDefinition cmd)
         {
             _commands[MakeKey(cmd.Sequence)] = cmd;
+            return true;
         }
 
         public CommandDefinition? FindBySequence(List<int> seq)
-        {
-            _commands.TryGetValue(MakeKey(seq), out var cmd);
-            return cmd;
-        }
+            => _commands.TryGetValue(MakeKey(seq), out var cmd) ? cmd : null;
 
         public IEnumerable<CommandDefinition> GetAll() => _commands.Values;
     }

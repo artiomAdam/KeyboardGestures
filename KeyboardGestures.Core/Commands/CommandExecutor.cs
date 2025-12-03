@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 
 namespace KeyboardGestures.Core.Commands
 {
     public class CommandExecutor : ICommandExecutor
     {
-        public void Execute(string actionId)
+        public void Execute(CommandDefinition cmd)
         {
-            Debug.WriteLine($"Execution action: {actionId}");
+            Debug.WriteLine($"Execution action: {cmd.CommandType}");
 
-            switch(actionId)
+            switch(cmd.CommandType)
             {
                 case "LaunchApp":
                     Debug.WriteLine("Launch an app");
@@ -26,9 +21,11 @@ namespace KeyboardGestures.Core.Commands
                 case "CopyPath":
                     // TODO: copy the path to current directory
                     break;
+                }
+                
 
                 default:
-                    Debug.WriteLine($"Unknown action: {actionId}");
+                    Debug.WriteLine($"Unknown action: ");
                     break;
             }
         }

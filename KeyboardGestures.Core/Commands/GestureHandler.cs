@@ -1,9 +1,4 @@
 ﻿using KeyboardGestures.Core.Gestures;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KeyboardGestures.Core.Commands
 {
@@ -17,9 +12,10 @@ namespace KeyboardGestures.Core.Commands
                 var cmd = registry.FindBySequence(seq);
                 if (cmd != null)
                 {
-                    executor.Execute(cmd.ActionId);
+                    executor.Execute(cmd);
                 }
             };
+
         }
     }
 }
