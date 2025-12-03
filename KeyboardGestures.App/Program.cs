@@ -32,19 +32,24 @@ namespace KeyboardGestures.App
 
                         OverlayWindow? overlay = null;
 
-                        handler.OverlayShouldOpen += () =>
+                        handler.OverlayShouldOpen += async () =>
                         {
                             if (overlay == null)
                             {
                                 overlay = Services.GetRequiredService<OverlayWindow>();
-                                overlay.Show();
+                                await overlay.OpenOverlay();
                             }
                         };
 
-                        handler.OverlayShouldClose += () =>
+                        handler.OverlayShouldClose += async () =>
                         {
-                            overlay?.Hide();
-                            overlay = null;
+                            if (overlay is not null)
+                            { 
+                                await overlay.CloseOverlay();
+                                overlay = null;
+                            }
+                            
+                            
                         };
 
                         hook.KeyEventReceived += interpreter.OnKeyEvent;
@@ -86,8 +91,8 @@ namespace KeyboardGestures.App
             services.AddSingleton<GestureHandler>();
 
 
-            services.AddTransient<OverlayViewModel>();
-            services.AddTransient<OverlayWindow>();
+            services.AddSingleton<OverlayViewModel>();
+            services.AddSingleton<OverlayWindow>();
 
 
             Services = services.BuildServiceProvider();
