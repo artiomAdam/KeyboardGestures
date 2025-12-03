@@ -1,10 +1,8 @@
 [
   {
-    "Sequence": [ 32 ],
-    "ActionId": "ShowOverlay"
-  },
-  {
     "Sequence": [ 67, 80 ],
-    "ActionId": "LaunchApp"
+    "CommandType": "LaunchApp",
+    "ApplicationPath": "C:\\Program Files\\Mozilla Firefox\\firefox.exe",
+    "Description": ""
   }
 ]

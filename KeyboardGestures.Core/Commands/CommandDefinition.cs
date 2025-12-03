@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace KeyboardGestures.Core.Commands
+﻿namespace KeyboardGestures.Core.Commands
 {
+    public enum CommandType
+    {
+        LaunchApp
+    }
     public class CommandDefinition
     {
         public List<int> Sequence { get; set; } = new();
-        public string ActionId { get; set; } = "";
+        public CommandType CommandType { get; set; }
+
+        public string? Description { get; set; }
+        public string? ApplicationPath { get; set; } // only for LaunchApp type
     }
 }
