@@ -12,12 +12,14 @@ public partial class TrayMenuWindow : Window
 
     private CancellationTokenSource? _mouseLeaveCts;
     private readonly TimeSpan _hideDelay = TimeSpan.FromMilliseconds(400);
-    public TrayMenuWindow()
+    private readonly SettingsWindow _settingsWindow;
+    public TrayMenuWindow(SettingsWindow settingsWindow)
     {
         InitializeComponent();
         this.Deactivated += (_, _) => Hide();
         this.PointerEntered += OnPointerEntered;
         this.PointerExited += OnPointerExited;
+        _settingsWindow = settingsWindow;
     }
 
     private void OnPointerEntered(object? sender, PointerEventArgs e)
@@ -62,7 +64,7 @@ public partial class TrayMenuWindow : Window
 
     public void OnSettingsClick(object sender, RoutedEventArgs e)
     {
-
+        _settingsWindow.Show();
     }
 
     public void OnQuitClick(object sender, RoutedEventArgs e)
