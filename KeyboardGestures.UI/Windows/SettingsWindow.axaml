@@ -1,0 +1,131 @@
+<Window
+    x:Class="KeyboardGestures.UI.Windows.SettingsWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:vm="using:KeyboardGestures.UI.ViewModels"
+    Width="900"
+    Height="600"
+    Title="Settings"
+    Background="#1e1e1e">
+
+	<Grid ColumnDefinitions="250, *" >
+
+		<!-- LEFT PANEL: COMMAND LIST -->
+		<Border Background="#2b2b2b" CornerRadius="6" Padding="10" Margin="0,0,12,0">
+			<DockPanel>
+
+				<TextBlock Text="Commands"
+                           FontSize="18"
+                           FontWeight="SemiBold"
+                           Margin="0 0 0 8"/>
+
+				<ListBox ItemsSource="{Binding Commands}"
+                         SelectedItem="{Binding Selected}"
+                         Margin="0 8 0 8"
+                         DockPanel.Dock="Bottom">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<StackPanel Orientation="Horizontal" Spacing="8">
+								<TextBlock Text="{Binding CommandType}" Foreground="#ddd"/>
+								<TextBlock Text="•" Foreground="#555"/>
+
+								<ItemsControl ItemsSource="{Binding Sequence}">
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<Border Background="#3c3c3c" Padding="4 2" CornerRadius="4">
+												<TextBlock Text="{Binding .}" FontSize="12" />
+											</Border>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+
+									<ItemsControl.ItemsPanel>
+										<ItemsPanelTemplate>
+											<StackPanel Orientation="Horizontal" Spacing="4"/>
+										</ItemsPanelTemplate>
+									</ItemsControl.ItemsPanel>
+								</ItemsControl>
+
+							</StackPanel>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+
+				<Button Content="Add New Command"
+                        Command="{Binding AddNew}"
+                        HorizontalAlignment="Stretch"
+                        Background="#3f7cff"
+                        Foreground="White"
+                        CornerRadius="4"
+                        Padding="8"/>
+			</DockPanel>
+		</Border>
+
+
+		<!-- RIGHT PANEL: EDITOR -->
+		<Border Grid.Column="1"
+                Background="#2b2b2b"
+                CornerRadius="6"
+                Padding="16">
+			<StackPanel Spacing="12">
+
+				<!-- Empty state -->
+				<TextBlock Text="Select a command to edit..."
+                           IsVisible="{Binding HasSelected}"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Foreground="#777"
+                           FontSize="16"
+                           Margin="0 100 0 0"/>
+
+				<!-- Editor -->
+				<StackPanel IsVisible="{Binding HasSelected}" Spacing="16">
+
+					<TextBlock Text="Edit Command"
+                               FontSize="18"
+                               FontWeight="SemiBold"/>
+
+					<!-- Command Type -->
+					<StackPanel>
+						<TextBlock Text="Command Type" Margin="0 0 0 4"/>
+						<TextBox Text="{Binding Selected.CommandType}" IsReadOnly="True"/>
+					</StackPanel>
+
+					<!-- Sequence (you may implement SequenceString on VM) -->
+					<StackPanel>
+						<TextBlock Text="Sequence" Margin="0 0 0 4"/>
+						<TextBox Text="{Binding Selected.SequenceString}"
+                                 Watermark="e.g.: 67-80" />
+					</StackPanel>
+
+					<!-- LaunchApp: Application Path -->
+					<StackPanel IsVisible="{Binding IsLaunchApp}">
+						<TextBlock Text="Application Path" Margin="0 0 0 4"/>
+						<TextBox Text="{Binding Selected.ApplicationPath}"
+                                 Watermark="Path to .exe"/>
+					</StackPanel>
+
+					<!-- Actions -->
+					<StackPanel Orientation="Horizontal" Spacing="8">
+						<Button Content="Save"
+                                Command="{Binding SaveSelected}"
+                                Background="#3f7cff"
+                                Foreground="White"
+                                CornerRadius="4"
+                                Padding="8 4"/>
+
+						<Button Content="Delete"
+                                Command="{Binding DeleteSelected}"
+                                Background="#663333"
+                                Foreground="White"
+                                CornerRadius="4"
+                                Padding="8 4"/>
+					</StackPanel>
+
+				</StackPanel>
+
+			</StackPanel>
+		</Border>
+
+	</Grid>
+</Window>
