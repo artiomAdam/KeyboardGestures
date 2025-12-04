@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="KeyboardGestures.UI.Windows.OverlayWindow"
+		xmlns:cmd="clr-namespace:KeyboardGestures.Core.Commands;assembly=KeyboardGestures.Core"
         Background="Transparent"
         SystemDecorations="None"
         CanResize="False"
@@ -13,36 +14,37 @@
 			<TranslateTransform X="-300"/>
 		</Border.RenderTransform>
 
-		<Grid ClipToBounds="True">
+		<Grid ClipToBounds="False">
 
-			<Border CornerRadius="20" ClipToBounds="True">
+			<Border CornerRadius="20" ClipToBounds="True" ZIndex="0">
 				<Image Source="avares://KeyboardGestures.UI/Assets/noise.png"
 					   Stretch="Fill"
 					   Opacity="0.05"/>
 			</Border>
 
-			<StackPanel Spacing="12">
+			<StackPanel Spacing="12" ZIndex="1" Width="200">
 
 				<TextBlock Text="Command Mode"
                            Foreground="White"
                            FontSize="20"
                            HorizontalAlignment="Center"/>
+				
+				
+					<ItemsControl Background="#FFFFFF" ItemsSource="{Binding Commands}">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate x:DataType="cmd:CommandDefinition">
+								<StackPanel Orientation="Vertical" Spacing="10">
+									<TextBlock Text="elem: " Foreground="White" FontSize="16"/>
+									<TextBlock Text="{Binding DisplayText}"
+											   Foreground="#FF00D4FF"
+											   FontWeight="Bold"
+											   FontSize="16"/>
 
-				<ItemsControl ItemsSource="{Binding Commands}">
-					<ItemsControl.ItemTemplate>
-						<DataTemplate>
-							<StackPanel Orientation="Horizontal" Spacing="10">
-								<TextBlock Text="{Binding SequenceText}"
-                                           Foreground="#FF00D4FF"
-                                           FontWeight="Bold"
-                                           FontSize="16"/>
-								<TextBlock Text="{Binding Description}"
-                                           Foreground="White"
-                                           FontSize="16"/>
-							</StackPanel>
-						</DataTemplate>
-					</ItemsControl.ItemTemplate>
-				</ItemsControl>
+								</StackPanel>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl> 
+				
 
 			</StackPanel>
 

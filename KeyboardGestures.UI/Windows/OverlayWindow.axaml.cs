@@ -25,7 +25,7 @@ public partial class OverlayWindow : Window
     {
         base.OnOpened(e);
 
-        var screen = Screens.Primary.WorkingArea;
+        var screen = Screens!.Primary!.WorkingArea; // screens and primary can't be null here, can they?
         Height = screen.Height;
         Width = 300;
 
