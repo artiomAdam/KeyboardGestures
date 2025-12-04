@@ -22,16 +22,19 @@
 
         public IEnumerable<CommandDefinition> GetAll() => _commands.Values;
 
-        public IEnumerable<DisplayCommand> GetDisplayCommands()
-        {
-            foreach(var cmd in _commands.Values)
-            {
-                yield return new DisplayCommand
-                {
-                    SequenceText = string.Join(" ", cmd.Sequence.Select(x => x.ToString("X2"))),
-                    Description = CommandDescriptionHelper.GetDescription(cmd)
-                };
-            }
-        }
+        //public IEnumerable<DisplayCommand> GetDisplayCommands()
+        //{
+        //    foreach (var cmd in _commands.Values)
+        //    {
+        //        var displaySeq = string.Join(" ",
+        //            cmd.Sequence.Select(CommandDisplayHelper.ToDisplayName));
+
+        //        yield return new DisplayCommand
+        //        {
+        //            SequenceText = displaySeq,
+        //            Description = CommandDisplayHelper.GetDescription(cmd)
+        //        };
+        //    }
+        //}
     }
 }
