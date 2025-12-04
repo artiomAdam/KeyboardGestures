@@ -5,12 +5,15 @@ using KeyboardGestures.Core.KeyboardHook;
 using KeyboardGestures.UI.ViewModels;
 using KeyboardGestures.UI.Windows;
 using Microsoft.Extensions.DependencyInjection;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reactive.Concurrency;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Avalonia.ReactiveUI;
 
 namespace KeyboardGestures.App
 {
@@ -23,6 +26,7 @@ namespace KeyboardGestures.App
         [STAThread]
         public static void Main(string[] args)
         {
+
             BuildAvaloniaApp().AfterSetup( _ =>
                     {
                         ConfigureServices();
@@ -90,9 +94,14 @@ namespace KeyboardGestures.App
             services.AddSingleton<ICommandExecutor, CommandExecutor>();
             services.AddSingleton<GestureHandler>();
 
+            // windows:
+            services.AddSingleton<TrayMenuWindow>();
 
             services.AddSingleton<OverlayViewModel>();
             services.AddSingleton<OverlayWindow>();
+
+            services.AddSingleton<SettingsViewModel>();
+            services.AddSingleton<SettingsWindow>();
 
 
             Services = services.BuildServiceProvider();
@@ -103,6 +112,6 @@ namespace KeyboardGestures.App
             => AppBuilder.Configure<App>()
                 .UsePlatformDetect()
                 .WithInterFont()
-                .LogToTrace();
+                .LogToTrace().UseReactiveUI();
     }
 }
