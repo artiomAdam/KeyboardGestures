@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using KeyboardGestures.UI.Windows;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Diagnostics;
 
@@ -12,7 +13,7 @@ namespace KeyboardGestures.App
         public TrayMenuWindow? _menuWindow;
         public override void Initialize()
         {
-            _menuWindow = new TrayMenuWindow();
+            
             AvaloniaXamlLoader.Load(this);
         }
 
@@ -22,7 +23,7 @@ namespace KeyboardGestures.App
             {
                 desktop.MainWindow = null;
             }
-
+            _menuWindow = Program.Services.GetRequiredService<TrayMenuWindow>();
             base.OnFrameworkInitializationCompleted();
         }
 
@@ -38,13 +39,9 @@ namespace KeyboardGestures.App
                 else tray.Hide();
             }
         }
-        private void Click_Quit(object? sender, System.EventArgs args)
-        {
-            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            {
-                desktop.Shutdown();
-            }
-        }
+
+
+        
 
 
     }
