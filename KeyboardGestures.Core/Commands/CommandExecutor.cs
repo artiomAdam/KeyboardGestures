@@ -8,37 +8,90 @@ namespace KeyboardGestures.Core.Commands
         {
             Debug.WriteLine($"Execution action: {cmd.CommandType}");
 
-            switch(cmd.CommandType)
+            switch (cmd.CommandType)
             {
                 case CommandType.LaunchApp:
-                {
-                    if(!string.IsNullOrWhiteSpace(cmd.ApplicationPath))
                     {
-                        try
-                        {
-                            Process.Start(new ProcessStartInfo
-                            {
-                                FileName = cmd.ApplicationPath,
-                                UseShellExecute = true
-                            });
-                        }
-                        catch (Exception ex)
-                        {
-                            Debug.WriteLine($"Failed to launch: {ex}");
-                        }
+                        LaunchApp(cmd.ApplicationPath);
+                        break;
                     }
-                    else
+                case CommandType.LaunchWebpage:
                     {
-                        Debug.WriteLine("LaunchApp called with no ApplicationPath");
+                        LaunchWebpage(cmd.Url);
+                        break;
                     }
-                    break;
-                }
-                
-
+                case CommandType.CopyCurrentPath:
+                    {
+                        CopyCurrentPath();
+                        break;
+                    }
+                case CommandType.ToggleMute:
+                    {
+                        ToggleMute();
+                        break;
+                    }
+                case CommandType.TakeScreenshot:
+                    {
+                        TakeScreenshot();
+                        break;
+                    }
                 default:
                     Debug.WriteLine($"Unknown action: ");
                     break;
             }
         }
+        private void LaunchApp(string? path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+                return;
+
+            try
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = path,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"LaunchApp error: {ex}");
+            }
+        }
+
+        private void LaunchWebpage(string? url)
+        {
+            if (string.IsNullOrWhiteSpace(url))
+                return;
+
+            Task.Run(() =>
+            {
+                try
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = url,
+                        UseShellExecute = true
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"OpenWebpage error: {ex}");
+                }
+            });
+        }
+        private void CopyCurrentPath()
+        {
+            return;
+        }
+        private void ToggleMute()
+        {
+            return;
+        }
+        private void TakeScreenshot()
+        {
+            return;
+        }
     }
+
 }

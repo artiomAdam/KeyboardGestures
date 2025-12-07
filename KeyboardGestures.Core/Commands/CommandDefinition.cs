@@ -6,7 +6,12 @@ namespace KeyboardGestures.Core.Commands
 {
     public enum CommandType
     {
-        LaunchApp
+        LaunchApp,
+        LaunchWebpage,
+        CopyCurrentPath,
+        ToggleMute,
+        TakeScreenshot, // This is only useful if you can just take a screenshot without this new win11 UI... if not should probably delete
+
     }
     public class CommandDefinition : INotifyPropertyChanged
     {
@@ -26,6 +31,7 @@ namespace KeyboardGestures.Core.Commands
 
         public string? Description { get; set; }
         public string? ApplicationPath { get; set; } // only for LaunchApp type
+        public string? Url { get; set; } // only for LaunchWebpage type
 
 
 
