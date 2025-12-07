@@ -1,5 +1,4 @@
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using KeyboardGestures.UI.ViewModels;
 
@@ -21,15 +20,8 @@ public partial class SettingsWindow : Window
 
     private void SequenceBox_LostFocus(object? sender, RoutedEventArgs e)
     {
-        var control = (Control?)sender;
-        var topLevel = TopLevel.GetTopLevel(control);
-        var focused = topLevel?.FocusManager?.GetFocusedElement();
-
-        // cancel recording unless accpet button was clicked, recording would be canceled there.
-        if (focused == AcceptButton)
-            return;
         if (DataContext is SettingsViewModel vm)
-            vm.OnSequenceInputLostFocus(focused == AcceptButton);
+            vm.OnSequenceInputLostFocus();
     }
 
     protected override void OnClosing(WindowClosingEventArgs e)

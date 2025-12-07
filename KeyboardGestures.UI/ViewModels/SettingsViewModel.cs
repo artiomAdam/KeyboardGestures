@@ -12,6 +12,10 @@ namespace KeyboardGestures.UI.ViewModels
     public class SettingsViewModel : ReactiveObject
     {
         public ObservableCollection<CommandDefinition> Commands { get; private set; } = new();
+
+        /*
+          this is the main command, this changes only on save. The UI should always monitor Editing instead of this.
+         */
         private CommandDefinition? _selected;
         public CommandDefinition? Selected
         {
@@ -23,23 +27,23 @@ namespace KeyboardGestures.UI.ViewModels
 
                 this.RaiseAndSetIfChanged(ref _selected, value);
 
-                this.RaisePropertyChanged(nameof(HasSelected));
-                this.RaisePropertyChanged(nameof(IsLaunchApp));
-                this.RaisePropertyChanged(nameof(IsLaunchWebpage));
-
                 if (_selected != null)
                 {
-                    Editing = new CommandDefinition(_selected);
+                    Editing = new CommandDefinition(_selected); // Editing is a copy of this
                 }
                 else
                 {
                     Editing = null;
                 }
+                this.RaiseAndSetIfChanged(ref _selected, value);
+                this.RaisePropertyChanged(nameof(HasSelected));
+                this.RaisePropertyChanged(nameof(IsLaunchApp));
+                this.RaisePropertyChanged(nameof(IsLaunchWebpage));
             }
         }
-        public bool HasSelected => Selected != null;
-        public bool IsLaunchApp => Selected?.CommandType == CommandType.LaunchApp; // to show application path on LaunchApp type
-        public bool IsLaunchWebpage => Selected?.CommandType == CommandType.LaunchWebpage; // to show URL on LaunchWebpage type
+        public bool HasSelected => Editing != null; // to show the right side bar
+        public bool IsLaunchApp => Editing?.CommandType == CommandType.LaunchApp; // to show application path on LaunchApp type
+        public bool IsLaunchWebpage => Editing?.CommandType == CommandType.LaunchWebpage; // to show URL on LaunchWebpage type
 
         private bool _isRecording;
         public bool IsRecording   // to control the sequence entry in the box
@@ -50,7 +54,7 @@ namespace KeyboardGestures.UI.ViewModels
         
 
 
-        // New editing field to remove all the temporary stuff:
+        // this is the working copy of the Selected command item (new or existing), this is referenced by the UI elements in the xaml.
         private CommandDefinition? _editing;
         public CommandDefinition? Editing
         {
@@ -58,7 +62,7 @@ namespace KeyboardGestures.UI.ViewModels
             private set => this.RaiseAndSetIfChanged(ref _editing, value);
         }
 
-        public IReadOnlyList<CommandType> CommandTypes { get; } = Enum.GetValues(typeof(CommandType)).Cast<CommandType>().ToList();
+        public IReadOnlyList<CommandType> CommandTypes { get; } = Enum.GetValues(typeof(CommandType)).Cast<CommandType>().ToList(); // for the combobox list of types
 
         // services
         private readonly IKeyboardHookService _keyboardHookService;
@@ -84,6 +88,12 @@ namespace KeyboardGestures.UI.ViewModels
             SaveSelected = ReactiveCommand.Create(SaveSelectedCommand, outputScheduler: RxApp.MainThreadScheduler);
             AcceptSequence = ReactiveCommand.Create(AcceptSequenceCommand, outputScheduler: RxApp.MainThreadScheduler);
 
+            this.WhenAnyValue(vm => vm.Editing!.CommandType)
+    .Subscribe(_ =>
+    {
+        this.RaisePropertyChanged(nameof(IsLaunchApp));
+        this.RaisePropertyChanged(nameof(IsLaunchWebpage));
+    });
         }
 
         private void OnKey(KeyEvent ev)
@@ -98,7 +108,6 @@ namespace KeyboardGestures.UI.ViewModels
 
         }
 
-        // start the recording of keys - clear the tempSequences
         private void BeginRecording()
         {
             if (Editing == null)
@@ -115,9 +124,8 @@ namespace KeyboardGestures.UI.ViewModels
             IsRecording = false;
         }
 
-        public void OnSequenceInputLostFocus(bool acceptClicked)
+        public void OnSequenceInputLostFocus()
         {
-            if (acceptClicked) return;
             CancelRecording();
         }
 
@@ -157,8 +165,6 @@ namespace KeyboardGestures.UI.ViewModels
             Selected.ApplicationPath = Editing.ApplicationPath;
             Selected.Url = Editing.Url;
             Selected.Sequence = Editing.Sequence.ToList();
-
-            
 
             _commandService.UpdateCommand(Selected, oldSeq);
         }

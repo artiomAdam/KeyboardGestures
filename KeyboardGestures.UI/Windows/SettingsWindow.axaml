@@ -184,10 +184,10 @@
 						</TextBox>
 
 						<!-- Accept button (visible only while recording) -->
-						<Button x:Name="AcceptButton" Content="Accept Sequence" Foreground="White"
+						<!--<Button x:Name="AcceptButton" Content="Accept Sequence" Foreground="White"
 								Command="{Binding AcceptSequence}"
 								Margin="0 6 0 0"
-								IsVisible="{Binding IsRecording}"/>
+								IsVisible="{Binding IsRecording}"/>-->
 					</StackPanel>
 
 					<!-- LaunchApp: Application Path -->
@@ -200,7 +200,7 @@
 					<!-- LaunchWebpage: URL -->
 					<StackPanel IsVisible="{Binding IsLaunchWebpage}">
 						<TextBlock Foreground="White" Text="URL" Margin="0 0 0 4"/>
-						<TextBox Text="{Binding Editing.URL}"
+						<TextBox Text="{Binding Editing.Url}"
                                  Watermark="www..."/>
 					</StackPanel>
 
