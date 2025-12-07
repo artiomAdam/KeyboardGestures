@@ -7,10 +7,20 @@
             if (!string.IsNullOrWhiteSpace(cmd.Description)) return cmd.Description;
             return cmd.CommandType switch
             {
-                CommandType.LaunchApp => $"Launch {char.ToUpper(Path.GetFileNameWithoutExtension(cmd.ApplicationPath)[0])}"
-                                                    + $"{Path.GetFileNameWithoutExtension(cmd.ApplicationPath)[1..]}",
+                CommandType.LaunchApp => FormatAppName(cmd.ApplicationPath),
+                CommandType.LaunchWebpage => $"Launch {cmd.Url}",
                 _ => $"{cmd.CommandType}",
             };
+        }
+        private static string FormatAppName(string? path)
+        {
+            var name = Path.GetFileNameWithoutExtension(path);
+
+            if (string.IsNullOrWhiteSpace(name))
+                return "Launch App";
+
+            // Capitalize safely
+            return "Launch " + char.ToUpper(name[0]) + name[1..];
         }
 
         private static readonly Dictionary<int, string> KnownNames = new()
