@@ -7,58 +7,124 @@
     Width="900"
     Height="600"
     Title="Settings"
-    Background="#1e1e1e">
+    Background="#dfdfdf">
 
-	<Grid ColumnDefinitions="250, *" >
+	<Grid ColumnDefinitions="1*, 2*" >
 
 		<!-- LEFT PANEL: COMMAND LIST -->
-		<Border Background="#2b2b2b" CornerRadius="6" Padding="10" Margin="0,0,12,0">
-			<DockPanel>
-
-				<TextBlock Text="Commands"
+		<Border Background="#dadada" CornerRadius="6" Padding="10" Margin="0,0,12,0">
+			<Grid RowDefinitions="100,*">
+				<TextBlock Grid.Row="0" Text="Commands"
                            FontSize="18"
                            FontWeight="SemiBold"
                            Margin="0 0 0 8"/>
 
-				<ListBox ItemsSource="{Binding Commands}"
-                         SelectedItem="{Binding Selected}"
-                         Margin="0 8 0 8"
-                         DockPanel.Dock="Bottom">
+				<Button Content="Add New Command"
+						Command="{Binding AddNew}"
+						HorizontalAlignment="Stretch"
+						Background="#3f7cff"
+						Foreground="White"
+						CornerRadius="4"
+						Padding="8"/>
+
+				<ListBox Grid.Row="1"
+						 ItemsSource="{Binding Commands}"
+						 SelectedItem="{Binding Selected}"
+						 Background="#f5f7fa"
+						 Margin="0 8 0 8"
+						 BorderThickness="0"
+						 CornerRadius="6">
+
 					<ListBox.ItemTemplate>
 						<DataTemplate>
-							<StackPanel Orientation="Horizontal" Spacing="8">
-								<TextBlock Text="{Binding CommandType}" Foreground="#ddd"/>
-								<TextBlock Text="•" Foreground="#555"/>
+							<Border Background="Transparent"
+									Padding="12 8"
+									CornerRadius="6">
+								<StackPanel Orientation="Horizontal" Spacing="12">
 
-								<ItemsControl ItemsSource="{Binding Sequence}">
-									<ItemsControl.ItemTemplate>
-										<DataTemplate>
-											<Border Background="#3c3c3c" Padding="4 2" CornerRadius="4">
-												<TextBlock Text="{Binding .}" FontSize="12" />
-											</Border>
-										</DataTemplate>
-									</ItemsControl.ItemTemplate>
+									<!-- Command type -->
+									<TextBlock Text="{Binding CommandType}"
+											   Foreground="#333"
+											   FontWeight="Bold"
+											   FontSize="15"/>
 
-									<ItemsControl.ItemsPanel>
-										<ItemsPanelTemplate>
-											<StackPanel Orientation="Horizontal" Spacing="4"/>
-										</ItemsPanelTemplate>
-									</ItemsControl.ItemsPanel>
-								</ItemsControl>
+									<TextBlock Text="•" Foreground="#999"/>
 
-							</StackPanel>
+									<!-- Sequence -->
+									<ItemsControl ItemsSource="{Binding SequenceAsTextList}">
+										<ItemsControl.ItemsPanel>
+											<ItemsPanelTemplate>
+												<StackPanel Orientation="Horizontal"
+															Spacing="6"/>
+											</ItemsPanelTemplate>
+										</ItemsControl.ItemsPanel>
+
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												<Border Background="#e3e9f1"
+														Padding="6 3"
+														CornerRadius="4"
+														BorderBrush="#c3ccd9"
+														BorderThickness="1">
+													<TextBlock Text="{Binding .}"
+															   FontSize="12"
+															   Foreground="#333"/>
+												</Border>
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+
+								</StackPanel>
+							</Border>
 						</DataTemplate>
 					</ListBox.ItemTemplate>
+
+					<ListBox.Styles>
+
+						<!-- Modern separators (thin, subtle, bright) -->
+						<Style Selector="ListBoxItem:not(:last-child)">
+							<Setter Property="Margin" Value="0,0,0,6"/>
+							<Setter Property="BorderBrush" Value="#dce1e9"/>
+							<Setter Property="BorderThickness" Value="0 0 0 1"/>
+						</Style>
+
+						<!-- Default item -->
+						<Style Selector="ListBoxItem">
+							<Setter Property="CornerRadius" Value="0"/>
+							<Setter Property="Background" Value="Transparent"/>
+							<Setter Property="BorderThickness" Value="0"/>
+							<Setter Property="Padding" Value="0"/>
+						</Style>
+
+						<!-- First item -->
+						<Style Selector="ListBoxItem:first-child">
+							<Setter Property="CornerRadius" Value="6 6 0 0"/>
+						</Style>
+
+						<!-- Last item -->
+						<Style Selector="ListBoxItem:last-child">
+							<Setter Property="CornerRadius" Value="0 0 6 6"/>
+						</Style>
+
+						<!-- Hover: light blue highlight -->
+						<Style Selector="ListBoxItem:pointerover /template/ Border#PART_SelectedBorder">
+							<Setter Property="Background" Value="#e9f2ff"/>
+						</Style>
+
+						<!-- Selected: modern blue pill -->
+						<Style Selector="ListBoxItem:selected /template/ Border#PART_SelectedBorder">
+							<Setter Property="Background" Value="#4c8dff"/>
+							<Setter Property="TextElement.Foreground" Value="White"/>
+						</Style>
+
+					</ListBox.Styles>
+
 				</ListBox>
 
-				<Button Content="Add New Command"
-                        Command="{Binding AddNew}"
-                        HorizontalAlignment="Stretch"
-                        Background="#3f7cff"
-                        Foreground="White"
-                        CornerRadius="4"
-                        Padding="8"/>
-			</DockPanel>
+
+
+
+			</Grid>
 		</Border>
 
 
@@ -81,26 +147,46 @@
 				<!-- Editor -->
 				<StackPanel IsVisible="{Binding HasSelected}" Spacing="16">
 
-					<TextBlock Text="Edit Command"
+					<TextBlock Foreground="White" Text="Edit Command"
                                FontSize="18"
                                FontWeight="SemiBold"/>
 
 					<!-- Command Type -->
 					<StackPanel>
-						<TextBlock Text="Command Type" Margin="0 0 0 4"/>
+						<TextBlock Foreground="White" Text="Command Type" Margin="0 0 0 4"/>
 						<TextBox Text="{Binding Selected.CommandType}" IsReadOnly="True"/>
 					</StackPanel>
 
-					<!-- Sequence (you may implement SequenceString on VM) -->
+					<!-- Sequence -->
 					<StackPanel>
-						<TextBlock Text="Sequence" Margin="0 0 0 4"/>
-						<TextBox Text="{Binding Selected.SequenceString}"
-                                 Watermark="e.g.: 67-80" />
+						<TextBlock Foreground="White" Text="Sequence" Margin="0 0 0 4"/>
+
+						<!-- Recorder TextBox -->
+						<TextBox
+							Text="{Binding TempSequenceTextJoined}"
+							IsReadOnly="True"
+							Background="#933"
+							Padding="6"
+							CornerRadius="4"
+							GotFocus="SequenceBox_GotFocus"
+							LostFocus="SequenceBox_LostFocus">
+							<TextBox.Resources>
+								<!-- focused border change -->
+								<SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#444"/>
+								<SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="#0c3"/>
+							</TextBox.Resources>
+						</TextBox>
+
+						<!-- Accept button (visible only while recording) -->
+						<Button x:Name="AcceptButton" Content="Accept Sequence" Foreground="White"
+								Command="{Binding AcceptSequence}"
+								Margin="0 6 0 0"
+								IsVisible="{Binding IsRecording}"/>
 					</StackPanel>
 
 					<!-- LaunchApp: Application Path -->
 					<StackPanel IsVisible="{Binding IsLaunchApp}">
-						<TextBlock Text="Application Path" Margin="0 0 0 4"/>
+						<TextBlock Foreground="White" Text="Application Path" Margin="0 0 0 4"/>
 						<TextBox Text="{Binding Selected.ApplicationPath}"
                                  Watermark="Path to .exe"/>
 					</StackPanel>

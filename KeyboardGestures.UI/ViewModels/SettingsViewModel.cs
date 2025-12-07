@@ -12,19 +12,26 @@ namespace KeyboardGestures.UI.ViewModels
     {
         private readonly CommandRegistry _registry;
         public ObservableCollection<CommandDefinition> Commands { get; private set; } = new();
+        private CommandDefinition? _originalSelected;
         private CommandDefinition? _selected;
         public CommandDefinition? Selected
         {
             get => _selected;
             set
             {
+                if (IsRecording) CancelRecording(); // when changing the selected item, reset recording
                 this.RaiseAndSetIfChanged(ref _selected, value);
                 this.RaisePropertyChanged(nameof(HasSelected));
                 this.RaisePropertyChanged(nameof(IsLaunchApp));
+                if (_selected != null)
+                {
+                    _originalSelected = _selected;
+                    ResetSequenceText(forceClear: true);
+                }
             }
         }
         public bool HasSelected => Selected != null;
-        public bool IsLaunchApp => Selected?.CommandType == CommandType.LaunchApp;
+        public bool IsLaunchApp => Selected?.CommandType == CommandType.LaunchApp; // so we can show Application Path for LaunchApp types.
 
         private bool _isRecording;
         public bool IsRecording   // to control the sequence entry in the box
@@ -61,20 +68,53 @@ namespace KeyboardGestures.UI.ViewModels
             AddNew = ReactiveCommand.Create(AddNewCommand, outputScheduler: RxApp.MainThreadScheduler);
             DeleteSelected = ReactiveCommand.Create(DeleteSelectedCommand, outputScheduler: RxApp.MainThreadScheduler);
             SaveSelected = ReactiveCommand.Create(SaveSelectedCommand, outputScheduler: RxApp.MainThreadScheduler);
+            AcceptSequence = ReactiveCommand.Create(AcceptSequenceCommand, outputScheduler: RxApp.MainThreadScheduler);
 
         }
 
-        public void AddNewCommand()
+        private void OnKey(KeyEvent ev)
         {
-           
+            if (!IsRecording) return;
+            if (ev.Type != KeyEventType.KeyDown) return;
+            int vk = ev.VirtualKeyCode;
+            // ignore ctrl
+            if (vk == 0x11 || vk == 0xA2 || vk == 0xA3)
+                return;
+            _tempSequence.Add(vk);
+            _tempSequenceText.Add(CommandDisplayHelper.ToDisplayName(vk));
+            this.RaisePropertyChanged(nameof(TempSequenceTextJoined));
         }
 
-        public void DeleteSelectedCommand()
+        // start the recording of keys - clear the tempSequences
+        private void BeginRecording()
         {
+            if (Selected == null)
+                return;
 
+            _tempSequence.Clear();
+            _tempSequenceText.Clear();
+            this.RaisePropertyChanged(nameof(TempSequenceTextJoined));
+            _keyboardHookService.KeyEventReceived += OnKey;
+            IsRecording = true;
         }
-        public void SaveSelectedCommand()
+
+        private void CancelRecording()
         {
+            _keyboardHookService.KeyEventReceived -= OnKey;
+            IsRecording = false;
+            ResetSequenceText();
+        }
+
+        public void OnSequenceInputLostFocus(bool acceptClicked)
+        {
+            if (acceptClicked) return;
+            CancelRecording();
+        }
+
+        public void OnSequenceInputGotFocus()
+        {
+            BeginRecording();
+        }
 
         private void AcceptSequenceCommand()
         {

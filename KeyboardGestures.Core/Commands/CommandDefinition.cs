@@ -1,4 +1,6 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Text.Json.Serialization;
 
 namespace KeyboardGestures.Core.Commands
 {
@@ -6,10 +8,21 @@ namespace KeyboardGestures.Core.Commands
     {
         LaunchApp
     }
-    public class CommandDefinition
+    public class CommandDefinition : INotifyPropertyChanged
     {
-        public List<int> Sequence { get; set; } = new();
-        public CommandType CommandType { get; set; }
+        private List<int> _sequence = new();
+        public List<int> Sequence
+        {
+            get => _sequence;
+            set
+            {
+                _sequence = value;
+                OnPropertyChanged(); // Sequence changed
+                OnPropertyChanged(nameof(SequenceAsTextList)); // computed
+                OnPropertyChanged(nameof(SequenceText));
+            }
+        }
+        public CommandType CommandType { get; set; } = CommandType.LaunchApp;
 
         public string? Description { get; set; }
         public string? ApplicationPath { get; set; } // only for LaunchApp type
@@ -27,5 +40,11 @@ namespace KeyboardGestures.Core.Commands
         [JsonIgnore]
         public string DisplayText =>
             $"{SequenceText}  –  {DisplayDescription}";
+        [JsonIgnore]
+        public List<string> SequenceAsTextList => Sequence.Select(CommandDisplayHelper.ToDisplayName).ToList();
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName] string? name = null)
+        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 }
