@@ -27,9 +27,22 @@ namespace KeyboardGestures.Core.Commands
                 OnPropertyChanged(nameof(SequenceText));
             }
         }
-        public CommandType CommandType { get; set; } = CommandType.LaunchApp;
+        private CommandType _commandType = CommandType.LaunchApp;
+        public CommandType CommandType
+        {
+            get => _commandType;
+            set
+            {
+                if (_commandType != value)
+                {
+                    _commandType = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(DisplayText)); // because description changes too
+                }
+            }
+        }
 
-        public string? Description { get; set; }
+        public string? Description { get; set; } = "";
         public string? ApplicationPath { get; set; } // only for LaunchApp type
         public string? Url { get; set; } // only for LaunchWebpage type
 
