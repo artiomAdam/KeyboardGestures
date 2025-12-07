@@ -10,12 +10,10 @@ namespace KeyboardGestures.UI.ViewModels
     {
         public ObservableCollection<CommandDefinition> Commands { get; } = new();
 
-        public OverlayViewModel(CommandRegistry registry) 
+        public OverlayViewModel(ICommandService commandService) 
         {
-            foreach (var cmd in registry.GetAll())
-            {
+            foreach (var cmd in commandService.LoadAll())
                 Commands.Add(cmd);
-            }
         }
     }
 }

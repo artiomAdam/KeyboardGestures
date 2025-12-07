@@ -1,6 +1,8 @@
 ﻿using Avalonia;
+using Avalonia.ReactiveUI;
 using KeyboardGestures.Core.Commands;
 using KeyboardGestures.Core.Gestures;
+using KeyboardGestures.Core.JsonStorage;
 using KeyboardGestures.Core.KeyboardHook;
 using KeyboardGestures.UI.ViewModels;
 using KeyboardGestures.UI.Windows;
@@ -13,7 +15,6 @@ using System.IO;
 using System.Reactive.Concurrency;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Avalonia.ReactiveUI;
 
 namespace KeyboardGestures.App
 {
@@ -73,23 +74,10 @@ namespace KeyboardGestures.App
 
             var registry = new CommandRegistry();
             var jsonPath = Path.Combine(AppContext.BaseDirectory, "Resources\\commands.json");
-            if(File.Exists(jsonPath))
-            {
-                var json = File.ReadAllText(jsonPath);
-                var options = new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true,
-                    Converters = { new JsonStringEnumConverter() }
-                };
-                var cmds = JsonSerializer.Deserialize<List<CommandDefinition>>(json, options);
-                if(cmds != null)
-                {
-                    foreach (var cmd in cmds)
-                        registry.Register(cmd);
-                }
-            }
-            services.AddSingleton(registry);
+            services.AddSingleton<IJsonStorageService>(new JsonCommandStorageService(jsonPath));
 
+            services.AddSingleton<CommandRegistry>();            // empty registry
+            services.AddSingleton<ICommandService, CommandService>(); // service loads registry
 
             services.AddSingleton<ICommandExecutor, CommandExecutor>();
             services.AddSingleton<GestureHandler>();

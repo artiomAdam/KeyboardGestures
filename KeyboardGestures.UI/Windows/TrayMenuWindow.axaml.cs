@@ -72,4 +72,5 @@ public partial class TrayMenuWindow : Window
         Environment.Exit(0);
     }
 
+
 }

@@ -21,20 +21,19 @@
             => _commands.TryGetValue(MakeKey(seq), out var cmd) ? cmd : null;
 
         public IEnumerable<CommandDefinition> GetAll() => _commands.Values;
+        public void Remove(CommandDefinition cmd)
+        {
+            var key = MakeKey(cmd.Sequence);
+            _commands.Remove(key);
+        }
+        public void UpdateSequence(CommandDefinition cmd, List<int> oldSequence)
+        {
+            var oldKey = MakeKey(oldSequence);
+            _commands.Remove(oldKey);
 
-        //public IEnumerable<DisplayCommand> GetDisplayCommands()
-        //{
-        //    foreach (var cmd in _commands.Values)
-        //    {
-        //        var displaySeq = string.Join(" ",
-        //            cmd.Sequence.Select(CommandDisplayHelper.ToDisplayName));
+            var newKey = MakeKey(cmd.Sequence);
+            _commands[newKey] = cmd;
+        }
 
-        //        yield return new DisplayCommand
-        //        {
-        //            SequenceText = displaySeq,
-        //            Description = CommandDisplayHelper.GetDescription(cmd)
-        //        };
-        //    }
-        //}
     }
 }
