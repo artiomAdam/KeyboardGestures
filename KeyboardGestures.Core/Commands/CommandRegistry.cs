@@ -21,6 +21,12 @@
             => _commands.TryGetValue(MakeKey(seq), out var cmd) ? cmd : null;
 
         public IEnumerable<CommandDefinition> GetAll() => _commands.Values;
+        public bool Contains(CommandDefinition cmd) => _commands.ContainsValue(cmd);
+        public bool ContainsSequence(IEnumerable<int> sequence)
+        {
+            var key = MakeKey(sequence.ToList());
+            return _commands.ContainsKey(key);
+        }
         public void Remove(CommandDefinition cmd)
         {
             var key = MakeKey(cmd.Sequence);

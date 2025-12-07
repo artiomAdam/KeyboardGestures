@@ -154,7 +154,13 @@
 					<!-- Command Type -->
 					<StackPanel>
 						<TextBlock Foreground="White" Text="Command Type" Margin="0 0 0 4"/>
-						<TextBox Text="{Binding Selected.CommandType}" IsReadOnly="True"/>
+						<ComboBox
+							ItemsSource="{Binding CommandTypes}"
+							SelectedItem="{Binding Editing.CommandType, Mode=TwoWay}"
+							MinWidth="200"
+							Background="#333"
+							Foreground="Black"/>
+
 					</StackPanel>
 
 					<!-- Sequence -->
@@ -163,7 +169,7 @@
 
 						<!-- Recorder TextBox -->
 						<TextBox
-							Text="{Binding TempSequenceTextJoined}"
+							Text="{Binding Editing.SequenceText}"
 							IsReadOnly="True"
 							Background="#933"
 							Padding="6"
@@ -187,8 +193,15 @@
 					<!-- LaunchApp: Application Path -->
 					<StackPanel IsVisible="{Binding IsLaunchApp}">
 						<TextBlock Foreground="White" Text="Application Path" Margin="0 0 0 4"/>
-						<TextBox Text="{Binding Selected.ApplicationPath}"
+						<TextBox Text="{Binding Editing.ApplicationPath}"
                                  Watermark="Path to .exe"/>
+					</StackPanel>
+
+					<!-- LaunchWebpage: URL -->
+					<StackPanel IsVisible="{Binding IsLaunchWebpage}">
+						<TextBlock Foreground="White" Text="URL" Margin="0 0 0 4"/>
+						<TextBox Text="{Binding Editing.URL}"
+                                 Watermark="www..."/>
 					</StackPanel>
 
 					<!-- Actions -->

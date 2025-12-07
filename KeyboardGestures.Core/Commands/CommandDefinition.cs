@@ -52,5 +52,36 @@ namespace KeyboardGestures.Core.Commands
         public event PropertyChangedEventHandler? PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string? name = null)
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
+
+        // constructor options:
+        public CommandDefinition() { }
+
+        public CommandDefinition(CommandDefinition other)
+        {
+            CommandType = other.CommandType;
+            Sequence = other.Sequence.ToList();
+            Description = other.Description;
+            ApplicationPath = other.ApplicationPath;
+        }
+
+        public void AddToSequence(int key)
+        {
+            _sequence.Add(key);
+            OnPropertyChanged(nameof(Sequence));
+            OnPropertyChanged(nameof(SequenceAsTextList));
+            OnPropertyChanged(nameof(SequenceText));
+            OnPropertyChanged(nameof(DisplayText));
+        }
+
+        public void ClearSequence()
+        {
+            _sequence.Clear();
+            OnPropertyChanged(nameof(Sequence));
+            OnPropertyChanged(nameof(SequenceAsTextList));
+            OnPropertyChanged(nameof(SequenceText));
+            OnPropertyChanged(nameof(DisplayText));
+        }
+
     }
 }

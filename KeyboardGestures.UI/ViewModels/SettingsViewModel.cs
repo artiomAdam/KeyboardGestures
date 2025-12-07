@@ -2,6 +2,7 @@
 using KeyboardGestures.Core.Events;
 using KeyboardGestures.Core.JsonStorage;
 using KeyboardGestures.Core.KeyboardHook;
+using Microsoft.Win32;
 using ReactiveUI;
 using System.Collections.ObjectModel;
 using System.Reactive;
@@ -10,28 +11,35 @@ namespace KeyboardGestures.UI.ViewModels
 {
     public class SettingsViewModel : ReactiveObject
     {
-        private readonly CommandRegistry _registry;
         public ObservableCollection<CommandDefinition> Commands { get; private set; } = new();
-        private CommandDefinition? _originalSelected;
         private CommandDefinition? _selected;
         public CommandDefinition? Selected
         {
             get => _selected;
             set
             {
-                if (IsRecording) CancelRecording(); // when changing the selected item, reset recording
+                if (IsRecording)
+                    CancelRecording();
+
                 this.RaiseAndSetIfChanged(ref _selected, value);
+
                 this.RaisePropertyChanged(nameof(HasSelected));
                 this.RaisePropertyChanged(nameof(IsLaunchApp));
+                this.RaisePropertyChanged(nameof(IsLaunchWebpage));
+
                 if (_selected != null)
                 {
-                    _originalSelected = _selected;
-                    ResetSequenceText(forceClear: true);
+                    Editing = new CommandDefinition(_selected);
+                }
+                else
+                {
+                    Editing = null;
                 }
             }
         }
         public bool HasSelected => Selected != null;
-        public bool IsLaunchApp => Selected?.CommandType == CommandType.LaunchApp; // so we can show Application Path for LaunchApp types.
+        public bool IsLaunchApp => Selected?.CommandType == CommandType.LaunchApp; // to show application path on LaunchApp type
+        public bool IsLaunchWebpage => Selected?.CommandType == CommandType.LaunchWebpage; // to show URL on LaunchWebpage type
 
         private bool _isRecording;
         public bool IsRecording   // to control the sequence entry in the box
@@ -40,14 +48,21 @@ namespace KeyboardGestures.UI.ViewModels
             set => this.RaiseAndSetIfChanged(ref _isRecording, value);
         }
         
-        // the UI is bound to those, and those are eventually saved or discarded
-        private List<int> _tempSequence = new();
-        private List<string> _tempSequenceText = new();
-        public string TempSequenceTextJoined => string.Join(" ", _tempSequenceText); // sequence text displayed on the sequence box
+
+
+        // New editing field to remove all the temporary stuff:
+        private CommandDefinition? _editing;
+        public CommandDefinition? Editing
+        {
+            get => _editing;
+            private set => this.RaiseAndSetIfChanged(ref _editing, value);
+        }
+
+        public IReadOnlyList<CommandType> CommandTypes { get; } = Enum.GetValues(typeof(CommandType)).Cast<CommandType>().ToList();
 
         // services
         private readonly IKeyboardHookService _keyboardHookService;
-        private readonly IJsonStorageService _jsonStorageService;
+
         private readonly ICommandService _commandService;
 
         // commands
@@ -57,9 +72,8 @@ namespace KeyboardGestures.UI.ViewModels
         public ReactiveCommand<Unit, Unit> AcceptSequence { get; }
 
         
-        public SettingsViewModel(ICommandService commandService, IKeyboardHookService keyboard, IJsonStorageService jsonStorageService) 
+        public SettingsViewModel(ICommandService commandService, IKeyboardHookService keyboard) 
         {
-            _jsonStorageService = jsonStorageService;
             _keyboardHookService = keyboard;
             _commandService = commandService;
             foreach (var cmd in commandService.LoadAll())
@@ -80,20 +94,17 @@ namespace KeyboardGestures.UI.ViewModels
             // ignore ctrl
             if (vk == 0x11 || vk == 0xA2 || vk == 0xA3)
                 return;
-            _tempSequence.Add(vk);
-            _tempSequenceText.Add(CommandDisplayHelper.ToDisplayName(vk));
-            this.RaisePropertyChanged(nameof(TempSequenceTextJoined));
+            Editing?.AddToSequence(vk);
+
         }
 
         // start the recording of keys - clear the tempSequences
         private void BeginRecording()
         {
-            if (Selected == null)
+            if (Editing == null)
                 return;
 
-            _tempSequence.Clear();
-            _tempSequenceText.Clear();
-            this.RaisePropertyChanged(nameof(TempSequenceTextJoined));
+            Editing.ClearSequence();
             _keyboardHookService.KeyEventReceived += OnKey;
             IsRecording = true;
         }
@@ -102,7 +113,6 @@ namespace KeyboardGestures.UI.ViewModels
         {
             _keyboardHookService.KeyEventReceived -= OnKey;
             IsRecording = false;
-            ResetSequenceText();
         }
 
         public void OnSequenceInputLostFocus(bool acceptClicked)
@@ -118,38 +128,39 @@ namespace KeyboardGestures.UI.ViewModels
 
         private void AcceptSequenceCommand()
         {
-            if (Selected == null) return;
             CancelRecording();
         }
 
         private void AddNewCommand()
         {
-            Selected = null;
-            Selected = new CommandDefinition();
-            ResetSequenceText(forceClear : true);
+            var fresh = new CommandDefinition();
+            Commands.Add(fresh);
+
+            Selected = fresh;
         }
 
         private void DeleteSelectedCommand()
         {
+            if (Selected == null) return;
             _commandService.Delete(Selected);
             Commands.Remove(Selected);
         }
         private void SaveSelectedCommand()
         {
-            if (Selected != null && _originalSelected != null)
-            {
-                if (!Commands.Contains(Selected))
-                {
-                    var oldSeq = Selected.Sequence.ToList();
-                    Selected.Sequence = _tempSequence.ToList();
-                    Commands.Add(Selected);
-                    _commandService.AddNew(Selected);
-                }
-                else
-                {
-                    _commandService.UpdateSequence(Selected, _tempSequence.ToList());
-                }
-            }
+            if (Editing == null || Selected == null)
+                return;
+
+            var oldSeq = Selected.Sequence.ToList();
+
+            Selected.CommandType = Editing.CommandType;
+            Selected.Description = Editing.Description;
+            Selected.ApplicationPath = Editing.ApplicationPath;
+            Selected.Url = Editing.Url;
+            Selected.Sequence = Editing.Sequence.ToList();
+
+            
+
+            _commandService.UpdateCommand(Selected, oldSeq);
         }
 
         public void Dispose()
@@ -157,19 +168,6 @@ namespace KeyboardGestures.UI.ViewModels
             _keyboardHookService.KeyEventReceived -= OnKey;
         }
 
-        // sets the _tempSequenceText and _tempSequence to selected:
-        // 1. when selected is changed
-        // 2. when focus is lost (recording is stopped) and the field was empty
-        // otherwise, it stays as is.
-        private void ResetSequenceText(bool forceClear = false)
-        {
-            if (_selected == null) return;
-            if (forceClear || _tempSequence.Count == 0)
-            {
-                _tempSequenceText = _selected.SequenceAsTextList.ToList();
-                _tempSequence = _selected.Sequence.ToList();
-            }
-            this.RaisePropertyChanged(nameof(TempSequenceTextJoined));
-        }
+        
     }
 }

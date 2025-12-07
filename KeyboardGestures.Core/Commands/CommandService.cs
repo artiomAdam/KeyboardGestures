@@ -26,18 +26,16 @@ namespace KeyboardGestures.Core.Commands
             SaveAll();
         }
 
-        public void UpdateSequence(CommandDefinition cmd, List<int> newSeq)
+
+        public void UpdateCommand(CommandDefinition cmd, List<int>? oldSequence = null)
         {
-            var oldSeq = cmd.Sequence.ToList();
+            if (oldSequence != null && _registry.ContainsSequence(oldSequence))
+            {
+                _registry.UpdateSequence(cmd, oldSequence);
+                return;
+            }
+            _registry.Register(cmd);
 
-            cmd.Sequence = newSeq;
-            _registry.UpdateSequence(cmd, oldSeq);
-
-            SaveAll();
-        }
-
-        public void UpdateCommand(CommandDefinition cmd)
-        {
             SaveAll();
         }
 
