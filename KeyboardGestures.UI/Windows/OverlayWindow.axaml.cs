@@ -38,6 +38,7 @@ public partial class OverlayWindow : Window
 
     public async Task OpenOverlay()
     {
+        if (DataContext is OverlayViewModel vm) vm.RefreshCommands();
         Show();
 
         await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Render);
@@ -50,11 +51,13 @@ public partial class OverlayWindow : Window
         Hide();
     }
 
+    private int inAnimSpeed = 20;
+    private int outAnimSpeed = 20;
     private async Task AnimateSlideIn()
     {
         var animation = new Animation
         {
-            Duration = TimeSpan.FromMilliseconds(90),
+            Duration = TimeSpan.FromMilliseconds(inAnimSpeed),
             Easing = new CubicEaseOut(),
             FillMode = FillMode.Forward, 
             Children =
@@ -80,7 +83,7 @@ public partial class OverlayWindow : Window
     {
         var animation = new Animation
         {
-            Duration = TimeSpan.FromMilliseconds(80),
+            Duration = TimeSpan.FromMilliseconds(outAnimSpeed),
             Easing = new CubicEaseIn(),
             FillMode = FillMode.Forward, 
             Children =

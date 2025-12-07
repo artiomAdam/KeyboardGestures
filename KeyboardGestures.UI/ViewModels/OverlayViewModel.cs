@@ -3,16 +3,24 @@ using KeyboardGestures.Core.Commands;
 using ReactiveUI;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Design;
+using System.Diagnostics;
 
 namespace KeyboardGestures.UI.ViewModels
 {
     public class OverlayViewModel : ReactiveObject
     {
         public ObservableCollection<CommandDefinition> Commands { get; } = new();
-
+        private readonly ICommandService _commandService;
         public OverlayViewModel(ICommandService commandService) 
         {
-            foreach (var cmd in commandService.LoadAll())
+            _commandService = commandService;
+            RefreshCommands();
+        }
+
+        public void RefreshCommands()
+        {
+            Commands.Clear();
+            foreach (var cmd in _commandService.LoadAll())
                 Commands.Add(cmd);
         }
     }

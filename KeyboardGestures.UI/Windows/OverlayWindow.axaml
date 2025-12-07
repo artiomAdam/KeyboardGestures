@@ -6,50 +6,61 @@
         SystemDecorations="None"
         CanResize="False"
         Topmost="True"
-        TransparencyLevelHint="None"
+        TransparencyLevelHint="AcrylicBlur"
         WindowStartupLocation="Manual">
-	<Border x:Name="RootBorder" Background="#B0303030"
-            CornerRadius="20">
+	<Border x:Name="RootBorder" Background="#0a007f7f">
+
 		<Border.RenderTransform>
 			<TranslateTransform X="-300"/>
 		</Border.RenderTransform>
 
-		<Grid ClipToBounds="False">
-
-			<Border CornerRadius="20" ClipToBounds="True" ZIndex="0">
-				<Image Source="avares://KeyboardGestures.UI/Assets/noise.png"
-					   Stretch="Fill"
-					   Opacity="0.05"/>
-			</Border>
-
-			<StackPanel Spacing="12" ZIndex="1" Width="200">
-
-				<TextBlock Text="Command Mode"
+		<Grid ClipToBounds="False" ColumnDefinitions="*, Auto">
+			
+			<StackPanel Margin ="0,8,0,0" Grid.Column="0" Spacing="24" ZIndex="1">
+				<TextBlock Text="Commands:"
                            Foreground="White"
                            FontSize="20"
                            HorizontalAlignment="Center"/>
-				
-				
-					<ItemsControl Background="#FFFFFF" ItemsSource="{Binding Commands}">
+
+				<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+					<ItemsControl ItemsSource="{Binding Commands}" >
 						<ItemsControl.ItemTemplate>
 							<DataTemplate x:DataType="cmd:CommandDefinition">
-								<StackPanel Orientation="Vertical" Spacing="10">
-									<TextBlock Text="elem: " Foreground="White" FontSize="16"/>
-									<TextBlock Text="{Binding DisplayText}"
-											   Foreground="#FF00D4FF"
-											   FontWeight="Bold"
-											   FontSize="16"/>
 
-								</StackPanel>
+								<Border BorderBrush="Black" BorderThickness="0,0,0,2" Margin ="0,0,0,2">
+									<StackPanel Margin="12,3,3,8" Spacing="8">
+
+										<TextBlock Text="{Binding DisplayDescription}"
+												   FontSize="16"
+												   FontWeight="SemiBold"
+												   Foreground="#F1F1F1"
+												   TextWrapping="Wrap"/>
+
+										<TextBlock Text="{Binding SequenceText}"
+												   FontSize="14"
+												   Foreground="#00D4FF"
+												   Opacity="0.85"
+												   TextWrapping="NoWrap"/>
+
+									</StackPanel>
+								</Border>
 							</DataTemplate>
 						</ItemsControl.ItemTemplate>
-					</ItemsControl> 
-				
-
+					</ItemsControl>
+				</ScrollViewer>
 			</StackPanel>
 
+			<!-- this is basically the right border... since it seems impossible to make a gradient for a normal border..-->
+			<Rectangle Grid.Column="1" HorizontalAlignment="Right"
+					  Width="18"
+					  ZIndex="10" RadiusX="0" RadiusY="0">
+				<Rectangle.Fill>
+					<LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+						<GradientStop Color="#00000000" Offset="0.0"/>
+						<GradientStop Color="#70001010" Offset="1.0"/>
+					</LinearGradientBrush>
+				</Rectangle.Fill>
+			</Rectangle>
 		</Grid>
-
 	</Border>
-
 </Window>
