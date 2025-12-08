@@ -37,8 +37,7 @@
             var oldKey = MakeKey(oldSequence);
             _commands.Remove(oldKey);
 
-            var newKey = MakeKey(cmd.Sequence);
-            _commands[newKey] = cmd;
+            Register(cmd);
         }
 
     }
