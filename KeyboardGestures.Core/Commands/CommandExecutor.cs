@@ -1,9 +1,16 @@
-﻿using System.Diagnostics;
+﻿using KeyboardGestures.Core.Utilities;
+using System.Diagnostics;
+
 
 namespace KeyboardGestures.Core.Commands
 {
     public class CommandExecutor : ICommandExecutor
     {
+        private readonly IExecutionPlatform _executionPlatform;
+        public CommandExecutor(IExecutionPlatform executionPlatform)
+        {
+            _executionPlatform = executionPlatform;
+        }
         public void Execute(CommandDefinition cmd)
         {
             Debug.WriteLine($"Execution action: {cmd.CommandType}");
@@ -12,85 +19,33 @@ namespace KeyboardGestures.Core.Commands
             {
                 case CommandType.LaunchApp:
                     {
-                        LaunchApp(cmd.ApplicationPath);
+                        _executionPlatform.LaunchApp(cmd.ApplicationPath);
                         break;
                     }
                 case CommandType.LaunchWebpage:
                     {
-                        LaunchWebpage(cmd.Url);
+                        _executionPlatform.LaunchWebpage(cmd.Url);
                         break;
                     }
                 case CommandType.CopyCurrentPath:
                     {
-                        CopyCurrentPath();
+                        _executionPlatform.CopyCurrentPath();
                         break;
                     }
                 case CommandType.ToggleMute:
                     {
-                        ToggleMute();
+                        _executionPlatform.ToggleMute();
                         break;
                     }
                 case CommandType.TakeScreenshot:
                     {
-                        TakeScreenshot();
+                        _executionPlatform.TakeScreenshot();
                         break;
                     }
                 default:
                     Debug.WriteLine($"Unknown action: ");
                     break;
             }
-        }
-        private void LaunchApp(string? path)
-        {
-            if (string.IsNullOrWhiteSpace(path))
-                return;
-
-            try
-            {
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = path,
-                    UseShellExecute = true
-                });
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"LaunchApp error: {ex}");
-            }
-        }
-
-        private void LaunchWebpage(string? url)
-        {
-            if (string.IsNullOrWhiteSpace(url))
-                return;
-
-            Task.Run(() =>
-            {
-                try
-                {
-                    Process.Start(new ProcessStartInfo
-                    {
-                        FileName = url,
-                        UseShellExecute = true
-                    });
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"OpenWebpage error: {ex}");
-                }
-            });
-        }
-        private void CopyCurrentPath()
-        {
-            return;
-        }
-        private void ToggleMute()
-        {
-            return;
-        }
-        private void TakeScreenshot()
-        {
-            return;
         }
     }
 
