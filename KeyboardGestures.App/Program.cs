@@ -1,9 +1,11 @@
 ﻿using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.ReactiveUI;
 using KeyboardGestures.Core.Commands;
 using KeyboardGestures.Core.Gestures;
 using KeyboardGestures.Core.JsonStorage;
 using KeyboardGestures.Core.KeyboardHook;
+using KeyboardGestures.UI.ExecutionPlatform;
 using KeyboardGestures.UI.ViewModels;
 using KeyboardGestures.UI.Windows;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,7 +29,7 @@ namespace KeyboardGestures.App
         [STAThread]
         public static void Main(string[] args)
         {
-
+            
             BuildAvaloniaApp().AfterSetup( _ =>
                     {
                         ConfigureServices();
@@ -82,6 +84,8 @@ namespace KeyboardGestures.App
             services.AddSingleton<ICommandExecutor, CommandExecutor>();
             services.AddSingleton<GestureHandler>();
 
+            services.AddSingleton<IExecutionPlatform, CommandExecutionPlatform>();
+
             // windows:
             services.AddSingleton<TrayMenuWindow>();
 
@@ -90,7 +94,7 @@ namespace KeyboardGestures.App
 
             services.AddSingleton<SettingsViewModel>();
             services.AddSingleton<SettingsWindow>();
-
+            
 
             Services = services.BuildServiceProvider();
         }
