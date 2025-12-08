@@ -8,7 +8,7 @@
         Topmost="True"
         TransparencyLevelHint="AcrylicBlur"
         WindowStartupLocation="Manual">
-	<Border x:Name="RootBorder" Background="#0a007f7f">
+	<Border x:Name="RootBorder" Background="#9a001818">
 
 		<Border.RenderTransform>
 			<TranslateTransform X="-300"/>
@@ -16,19 +16,26 @@
 
 		<Grid ClipToBounds="False" ColumnDefinitions="*, Auto">
 			
-			<StackPanel Margin ="0,8,0,0" Grid.Column="0" Spacing="24" ZIndex="1">
-				<TextBlock Text="Commands:"
+			<!-- main stack panel, holds title, helper text, and the scrollviewer of commands -->
+			<StackPanel Margin ="0,8,0,0" Grid.Column="0" Spacing="24" ZIndex="1"> 
+				<TextBlock Text="Commands"
                            Foreground="White"
                            FontSize="20"
                            HorizontalAlignment="Center"/>
+				<TextBlock Text="Hold Ctrl and type any of the following commands"
+						   TextWrapping="Wrap"
+						   Foreground="White"
+						   FontSize="16"
+						   HorizontalAlignment="Center"/>
 
 				<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
 					<ItemsControl ItemsSource="{Binding Commands}" >
 						<ItemsControl.ItemTemplate>
 							<DataTemplate x:DataType="cmd:CommandDefinition">
 
-								<Border BorderBrush="Black" BorderThickness="0,0,0,2" Margin ="0,0,0,2">
-									<StackPanel Margin="12,3,3,8" Spacing="8">
+								<Border BorderBrush="#385252" BorderThickness="0,0,0,2" Margin ="0,0,0,2">
+									<!-- individual command stack -->
+									<StackPanel Margin="12,3,3,12" Spacing="8"> 
 
 										<TextBlock Text="{Binding DisplayDescription}"
 												   FontSize="16"
@@ -36,11 +43,29 @@
 												   Foreground="#F1F1F1"
 												   TextWrapping="Wrap"/>
 
-										<TextBlock Text="{Binding SequenceText}"
-												   FontSize="14"
-												   Foreground="#00D4FF"
-												   Opacity="0.85"
-												   TextWrapping="NoWrap"/>
+										<!-- horizontal sequence -->
+										<ItemsControl ItemsSource="{Binding SequenceAsTextList}">
+											<ItemsControl.ItemsPanel>
+												<ItemsPanelTemplate>
+													<StackPanel Orientation="Horizontal" Spacing="8"/>
+												</ItemsPanelTemplate>
+											</ItemsControl.ItemsPanel>
+
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<Border Background="#e3e9f1"
+															Padding="6 3"
+															CornerRadius="4"
+															BorderBrush="#c3ccd9"
+															BorderThickness="1">
+														<TextBlock Text="{Binding .}"
+																   FontSize="16"
+																   FontWeight="Bold"
+																   Foreground="#222"/>
+													</Border>
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+										</ItemsControl>
 
 									</StackPanel>
 								</Border>
