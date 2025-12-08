@@ -32,6 +32,7 @@ namespace KeyboardGestures.Core.Commands
             if (oldSequence != null && _registry.ContainsSequence(oldSequence))
             {
                 _registry.UpdateSequence(cmd, oldSequence);
+                SaveAll();
                 return;
             }
             _registry.Register(cmd);
