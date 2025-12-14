@@ -37,7 +37,7 @@ namespace KeyboardGestures.Core.Commands
         }
 
 
-        public void UpdateCommand(CommandDefinition cmd, List<int>? oldSequence = null)
+        public void UpdateCommand(CommandDefinition cmd, List<int>? oldSequence)
         {
             var newKey = cmd.Sequence;
 
@@ -45,12 +45,6 @@ namespace KeyboardGestures.Core.Commands
             {
                 if (_registry.ContainsSequence(newKey))
                     throw new InvalidOperationException("Key sequence already exists.");
-
-                _registry.UpdateSequence(cmd, oldSequence);
-            }
-            else
-            {
-                _registry.Register(cmd);
             }
 
             if (CommandRules.IsSingleInstance(cmd.CommandType))
@@ -61,6 +55,11 @@ namespace KeyboardGestures.Core.Commands
                 if (existing != null && !existing.Sequence.SequenceEqual(oldSequence))
                     throw new InvalidOperationException($"{cmd.CommandType} already exists.");
             }
+
+            if (!oldSequence.SequenceEqual(newKey))
+                _registry.UpdateSequence(cmd, oldSequence);
+            else
+                _registry.Register(cmd);
 
             SaveAll();
         }
