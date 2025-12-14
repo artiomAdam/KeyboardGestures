@@ -76,6 +76,7 @@ namespace KeyboardGestures.Core.Commands
             Sequence = other.Sequence.ToList();
             Description = other.Description;
             ApplicationPath = other.ApplicationPath;
+            Url = other.Url;
         }
 
         public void AddToSequence(int key)
