@@ -183,11 +183,6 @@
 							</TextBox.Resources>
 						</TextBox>
 
-						<!-- Accept button (visible only while recording) -->
-						<!--<Button x:Name="AcceptButton" Content="Accept Sequence" Foreground="White"
-								Command="{Binding AcceptSequence}"
-								Margin="0 6 0 0"
-								IsVisible="{Binding IsRecording}"/>-->
 					</StackPanel>
 
 					<!-- LaunchApp: Application Path -->
@@ -222,6 +217,12 @@
 					</StackPanel>
 
 				</StackPanel>
+				<TextBlock Text="{Binding ErrorMessage}"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Foreground="#777"
+                           FontSize="16"
+                           Margin="0 100 0 0"/>
 
 			</StackPanel>
 		</Border>

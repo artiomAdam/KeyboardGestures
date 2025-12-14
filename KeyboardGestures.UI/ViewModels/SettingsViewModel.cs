@@ -64,6 +64,14 @@ namespace KeyboardGestures.UI.ViewModels
 
         public IReadOnlyList<CommandType> CommandTypes { get; } = Enum.GetValues(typeof(CommandType)).Cast<CommandType>().ToList(); // for the combobox list of types
 
+        // error message
+        private string? _errorMessage;
+        public string? ErrorMessage
+        {
+            get => _errorMessage ?? string.Empty;
+            private set => this.RaiseAndSetIfChanged(ref _errorMessage, value);
+        }
+
         // services
         private readonly IKeyboardHookService _keyboardHookService;
 
@@ -80,20 +88,24 @@ namespace KeyboardGestures.UI.ViewModels
         {
             _keyboardHookService = keyboard;
             _commandService = commandService;
-            foreach (var cmd in commandService.LoadAll())
-                Commands.Add(cmd);
+            ReloadCommands();
 
             AddNew = ReactiveCommand.Create(AddNewCommand, outputScheduler: RxApp.MainThreadScheduler);
             DeleteSelected = ReactiveCommand.Create(DeleteSelectedCommand, outputScheduler: RxApp.MainThreadScheduler);
             SaveSelected = ReactiveCommand.Create(SaveSelectedCommand, outputScheduler: RxApp.MainThreadScheduler);
             AcceptSequence = ReactiveCommand.Create(AcceptSequenceCommand, outputScheduler: RxApp.MainThreadScheduler);
 
+            HandleCommandErrors(AddNew);
+            HandleCommandErrors(DeleteSelected);
+            HandleCommandErrors(SaveSelected);
+            HandleCommandErrors(AcceptSequence);
+
             this.WhenAnyValue(vm => vm.Editing!.CommandType)
-    .Subscribe(_ =>
-    {
-        this.RaisePropertyChanged(nameof(IsLaunchApp));
-        this.RaisePropertyChanged(nameof(IsLaunchWebpage));
-    });
+            .Subscribe(_ =>
+            {
+                this.RaisePropertyChanged(nameof(IsLaunchApp));
+                this.RaisePropertyChanged(nameof(IsLaunchWebpage));
+            });
         }
 
         private void OnKey(KeyEvent ev)
@@ -143,7 +155,7 @@ namespace KeyboardGestures.UI.ViewModels
         {
             var fresh = new CommandDefinition();
             Commands.Add(fresh);
-
+            ReloadCommands();
             Selected = fresh;
         }
 
@@ -159,14 +171,16 @@ namespace KeyboardGestures.UI.ViewModels
                 return;
 
             var oldSeq = Selected.Sequence.ToList();
+            var newSeq = Editing.Sequence.ToList();
+            //Selected.CommandType = Editing.CommandType;
+            //Selected.Description = Editing.Description;
+            //Selected.ApplicationPath = Editing.ApplicationPath;
+            //Selected.Url = Editing.Url;
+            //Selected.Sequence = Editing.Sequence.ToList();
 
-            Selected.CommandType = Editing.CommandType;
-            Selected.Description = Editing.Description;
-            Selected.ApplicationPath = Editing.ApplicationPath;
-            Selected.Url = Editing.Url;
-            Selected.Sequence = Editing.Sequence.ToList();
-
-            _commandService.UpdateCommand(Selected, oldSeq);
+            _commandService.UpdateCommand(Editing, oldSeq);
+            ReloadCommands();
+            Selected = Commands.FirstOrDefault(c => c.Sequence.SequenceEqual(newSeq));
         }
 
         public void Dispose()
@@ -174,6 +188,29 @@ namespace KeyboardGestures.UI.ViewModels
             _keyboardHookService.KeyEventReceived -= OnKey;
         }
 
-        
+
+        private void ReloadCommands()
+        {
+                Commands.Clear();
+                foreach (var cmd in _commandService.LoadAll())
+                    Commands.Add(cmd);
+        }
+
+        private void HandleCommandErrors(ReactiveCommand<Unit, Unit> command)
+        {
+            command.ThrownExceptions.Subscribe(ex =>
+            {
+                if (ex is InvalidOperationException)
+                {
+                    ErrorMessage = ex.Message;
+                }
+                else
+                {
+                    ErrorMessage = "Unexpected error occurred.";
+                }
+            });
+        }
+
+
     }
 }
