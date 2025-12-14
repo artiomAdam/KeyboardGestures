@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 
 namespace KeyboardGestures.Core.Commands
 {
+    /* Command uniqueness is */
     public class CommandService : ICommandService
     {
         private readonly CommandRegistry _registry;
@@ -18,10 +19,19 @@ namespace KeyboardGestures.Core.Commands
         }
 
         public IEnumerable<CommandDefinition> LoadAll()
-            => _registry.GetAll();
+    => _registry.GetAll()
+        .OrderBy(c => CommandRules.GetOrder(c.CommandType))
+        .ThenBy(c => c.CommandType.ToString());
 
         public void AddNew(CommandDefinition cmd)
         {
+            if (_registry.ContainsSequence(cmd.Sequence))
+                throw new InvalidOperationException("Key sequence already exists.");
+
+            if (CommandRules.IsSingleInstance(cmd.CommandType) &&
+                _registry.GetAll().Any(c => c.CommandType == cmd.CommandType))
+                throw new InvalidOperationException($"{cmd.CommandType} already exists.");
+
             _registry.Register(cmd);
             SaveAll();
         }
@@ -29,13 +39,28 @@ namespace KeyboardGestures.Core.Commands
 
         public void UpdateCommand(CommandDefinition cmd, List<int>? oldSequence = null)
         {
-            if (oldSequence != null && _registry.ContainsSequence(oldSequence))
+            var newKey = cmd.Sequence;
+
+            if (!oldSequence.SequenceEqual(newKey))
             {
+                if (_registry.ContainsSequence(newKey))
+                    throw new InvalidOperationException("Key sequence already exists.");
+
                 _registry.UpdateSequence(cmd, oldSequence);
-                SaveAll();
-                return;
             }
-            _registry.Register(cmd);
+            else
+            {
+                _registry.Register(cmd);
+            }
+
+            if (CommandRules.IsSingleInstance(cmd.CommandType))
+            {
+                var existing = _registry.GetAll()
+                    .FirstOrDefault(c => c.CommandType == cmd.CommandType);
+
+                if (existing != null && !existing.Sequence.SequenceEqual(oldSequence))
+                    throw new InvalidOperationException($"{cmd.CommandType} already exists.");
+            }
 
             SaveAll();
         }
