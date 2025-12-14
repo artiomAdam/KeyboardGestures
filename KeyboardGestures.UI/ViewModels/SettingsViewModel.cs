@@ -22,6 +22,7 @@ namespace KeyboardGestures.UI.ViewModels
             get => _selected;
             set
             {
+                ErrorMessage = null;
                 if (IsRecording)
                     CancelRecording();
 
