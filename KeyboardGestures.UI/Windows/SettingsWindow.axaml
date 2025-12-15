@@ -6,223 +6,357 @@
     xmlns:vm="using:KeyboardGestures.UI.ViewModels"
     Width="900"
     Height="600"
+	CanResize="False"
     Title="Settings"
-    Background="#dfdfdf">
+    Background="#7a000000"
+	TransparencyLevelHint="AcrylicBlur">
 
 	<Grid ColumnDefinitions="1*, 2*" >
 
 		<!-- LEFT PANEL: COMMAND LIST -->
-		<Border Background="#dadada" CornerRadius="6" Padding="10" Margin="0,0,12,0">
-			<Grid RowDefinitions="100,*">
-				<TextBlock Grid.Row="0" Text="Commands"
-                           FontSize="18"
-                           FontWeight="SemiBold"
-                           Margin="0 0 0 8"/>
+		<Border Background="#A02B2B2B"
+				CornerRadius="12"
+				Padding="10"
+				Margin="4">
 
-				<Button Content="Add New Command"
-						Command="{Binding AddNew}"
-						HorizontalAlignment="Stretch"
-						Background="#3f7cff"
-						Foreground="White"
-						CornerRadius="4"
-						Padding="8"/>
+			<Grid RowDefinitions="Auto,*,Auto"
+				  RowSpacing="10">
 
-				<ListBox Grid.Row="1"
-						 ItemsSource="{Binding Commands}"
-						 SelectedItem="{Binding Selected}"
-						 Background="#f5f7fa"
-						 Margin="0 8 0 8"
-						 BorderThickness="0"
-						 CornerRadius="6">
+				<!-- HEADER -->
+				<StackPanel Grid.Row="0"
+							Spacing="6">
+					<TextBlock Text="Commands"
+							   FontSize="18"
+							   FontWeight="Bold"
+							   Foreground="White"/>
 
-					<ListBox.ItemTemplate>
-						<DataTemplate>
-							<Border Background="Transparent"
-									Padding="12 8"
-									CornerRadius="6">
-								<StackPanel Orientation="Horizontal" Spacing="12">
+					<Border Height="1"
+							Background="#40FFFFFF"/>
+				</StackPanel>
 
-									<!-- Command type -->
-									<TextBlock Text="{Binding CommandType}"
-											   Foreground="#333"
-											   FontWeight="Bold"
-											   FontSize="15"/>
+				<!-- COMMAND LIST -->
+				<Border Grid.Row="1"
+						Background="#1FFFFFFF"
+						CornerRadius="10"
+						Padding="4">
 
-									<TextBlock Text="•" Foreground="#999"/>
+					<ListBox ItemsSource="{Binding Commands}"
+							 SelectedItem="{Binding Selected}"
+							 Background="Transparent"
+							 BorderThickness="0"
+							 VerticalAlignment="Stretch">
 
-									<!-- Sequence -->
-									<ItemsControl ItemsSource="{Binding SequenceAsTextList}">
-										<ItemsControl.ItemsPanel>
-											<ItemsPanelTemplate>
-												<StackPanel Orientation="Horizontal"
-															Spacing="6"/>
-											</ItemsPanelTemplate>
-										</ItemsControl.ItemsPanel>
+						<!-- ITEM TEMPLATE -->
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<StackPanel>
 
-										<ItemsControl.ItemTemplate>
-											<DataTemplate>
-												<Border Background="#e3e9f1"
-														Padding="6 3"
-														CornerRadius="4"
-														BorderBrush="#c3ccd9"
-														BorderThickness="1">
-													<TextBlock Text="{Binding .}"
-															   FontSize="12"
-															   Foreground="#333"/>
-												</Border>
-											</DataTemplate>
-										</ItemsControl.ItemTemplate>
-									</ItemsControl>
+									<!-- ITEM CONTENT -->
+									<Border Padding="10 8"
+											CornerRadius="8"
+											Background="Transparent">
 
+										<StackPanel Orientation="Horizontal"
+													Spacing="10"
+													VerticalAlignment="Center">
+
+											<TextBlock Text="{Binding CommandType}"
+													   FontSize="14"
+													   FontWeight="SemiBold"
+													   Foreground="White"/>
+
+											<TextBlock Text="•"
+													   Foreground="#80FFFFFF"/>
+
+											<ItemsControl ItemsSource="{Binding SequenceAsTextList}">
+												<ItemsControl.ItemsPanel>
+													<ItemsPanelTemplate>
+														<StackPanel Orientation="Horizontal"
+																	Spacing="6"/>
+													</ItemsPanelTemplate>
+												</ItemsControl.ItemsPanel>
+
+												<ItemsControl.ItemTemplate>
+													<DataTemplate>
+														<Border Background="#33FFFFFF"
+																CornerRadius="6"
+																Padding="6 3">
+															<TextBlock Text="{Binding .}"
+																	   FontSize="12"
+																	   Foreground="White"/>
+														</Border>
+													</DataTemplate>
+												</ItemsControl.ItemTemplate>
+											</ItemsControl>
+
+										</StackPanel>
+									</Border>
+
+									<!-- SEPARATOR -->
+									<Border Height="1"
+											Margin="10 0"
+											Background="#20FFFFFF"/>
 								</StackPanel>
-							</Border>
-						</DataTemplate>
-					</ListBox.ItemTemplate>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
 
-					<ListBox.Styles>
+						<!-- LIST STYLES -->
+						<ListBox.Styles>
 
-						<!-- Modern separators (thin, subtle, bright) -->
-						<Style Selector="ListBoxItem:not(:last-child)">
-							<Setter Property="Margin" Value="0,0,0,6"/>
-							<Setter Property="BorderBrush" Value="#dce1e9"/>
-							<Setter Property="BorderThickness" Value="0 0 0 1"/>
-						</Style>
+							<Style Selector="ListBoxItem">
+								<Setter Property="Padding" Value="0"/>
+								<Setter Property="Margin" Value="0"/>
+								<Setter Property="Background" Value="Transparent"/>
+								<Setter Property="BorderThickness" Value="0"/>
+							</Style>
 
-						<!-- Default item -->
-						<Style Selector="ListBoxItem">
-							<Setter Property="CornerRadius" Value="0"/>
-							<Setter Property="Background" Value="Transparent"/>
-							<Setter Property="BorderThickness" Value="0"/>
-							<Setter Property="Padding" Value="0"/>
-						</Style>
+							<!-- Hover -->
+							<Style Selector="ListBoxItem:pointerover > ContentPresenter">
+								<Setter Property="Background" Value="#26FFFFFF"/>
+							</Style>
 
-						<!-- First item -->
-						<Style Selector="ListBoxItem:first-child">
-							<Setter Property="CornerRadius" Value="6 6 0 0"/>
-						</Style>
+							<!-- Selected -->
+							<Style Selector="ListBoxItem:selected > ContentPresenter">
+								<Setter Property="Background" Value="#b04BB9E2"/>
+							</Style>
 
-						<!-- Last item -->
-						<Style Selector="ListBoxItem:last-child">
-							<Setter Property="CornerRadius" Value="0 0 6 6"/>
-						</Style>
+						</ListBox.Styles>
 
-						<!-- Hover: light blue highlight -->
-						<Style Selector="ListBoxItem:pointerover /template/ Border#PART_SelectedBorder">
-							<Setter Property="Background" Value="#e9f2ff"/>
-						</Style>
+					</ListBox>
+				</Border>
 
-						<!-- Selected: modern blue pill -->
-						<Style Selector="ListBoxItem:selected /template/ Border#PART_SelectedBorder">
-							<Setter Property="Background" Value="#4c8dff"/>
-							<Setter Property="TextElement.Foreground" Value="White"/>
-						</Style>
+				<!-- ADD COMMAND (FOOTER ACTION) -->
+				<Border Grid.Row="2"
+						Background="#4affffff"
+						CornerRadius="8"
+						Padding="8">
 
-					</ListBox.Styles>
+					<Button Command="{Binding AddNew}"
+							HorizontalAlignment="Stretch"
+							Foreground="#f0000000"
+							FontWeight="SemiBold"
+							Padding="10 6"
+							CornerRadius="6"
+							Content="+ Create new command"
+							Background="#300000ff">
 
-				</ListBox>
+						<Button.Styles>
+							<Style Selector="Button:pointerover > ContentPresenter">
+								<Setter Property="Background" Value="#600000ff"/>
+							</Style>
+							<Style Selector="Button:pressed > ContentPresenter">
+								<Setter Property="Background" Value="#600000aa"/>
+							</Style>
+						</Button.Styles>
 
-
-
+					</Button>
+				</Border>
 
 			</Grid>
 		</Border>
 
 
+
+
 		<!-- RIGHT PANEL: EDITOR -->
 		<Border Grid.Column="1"
-                Background="#2b2b2b"
-                CornerRadius="6"
-                Padding="16">
+				Background="Transparent"
+				Padding="6"
+				Margin="4">
+
 			<StackPanel Spacing="12">
 
-				<!-- Empty state -->
-				<TextBlock Text="Select a command to edit..."
-                           IsVisible="{Binding HasSelected}"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Foreground="#777"
-                           FontSize="16"
-                           Margin="0 100 0 0"/>
+				<!-- EDITOR CARD -->
+				<Border Height="520"
+						Background="#9A000000"
+						CornerRadius="12"
+						Padding="14"
+						IsVisible="{Binding HasSelected}">
 
-				<!-- Editor -->
-				<StackPanel IsVisible="{Binding HasSelected}" Spacing="16">
+					<StackPanel Spacing="22">
 
-					<TextBlock Foreground="White" Text="Edit Command"
-                               FontSize="18"
-                               FontWeight="SemiBold"/>
+						<!-- HEADER -->
+						<StackPanel Spacing="8" HorizontalAlignment="Center">
+							<TextBlock Text="Edit Command"
+									   FontSize="20"
+									   FontWeight="Bold"
+									   Foreground="White"
+									   TextAlignment="Center"/>
 
-					<!-- Command Type -->
-					<StackPanel>
-						<TextBlock Foreground="White" Text="Command Type" Margin="0 0 0 4"/>
-						<ComboBox
-							ItemsSource="{Binding CommandTypes}"
-							SelectedItem="{Binding Editing.CommandType, Mode=TwoWay}"
-							MinWidth="200"
-							Background="#333"
-							Foreground="Black"/>
+							<Border Height="1"
+									Width="140"
+									Background="#40FFFFFF"/>
+						</StackPanel>
+
+						<!-- COMMAND TYPE -->
+						<Border Background="#1FFFFFFF"
+								CornerRadius="8"
+								Padding="12">
+							<StackPanel Spacing="6">
+								<TextBlock Text="Command Type"
+										   FontSize="13"
+										   FontWeight="SemiBold"
+										   Foreground="White"/>
+
+								<ComboBox
+									ItemsSource="{Binding CommandTypes}"
+									SelectedItem="{Binding Editing.CommandType, Mode=TwoWay}"
+									MinWidth="220"
+									Background="#E0FFFFFF"
+									Foreground="#111"
+									BorderBrush="#00000040"
+									BorderThickness="1"
+									CornerRadius="6"
+									Padding="6"/>
+							</StackPanel>
+						</Border>
+
+						<!-- SEQUENCE -->
+						<Border Background="#1FFFFFFF"
+								CornerRadius="8"
+								Padding="12">
+							<StackPanel Spacing="8">
+								<TextBlock Text="Key Sequence"
+										   FontSize="13"
+										   FontWeight="SemiBold"
+										   Foreground="White"/>
+
+								<TextBox
+									Text="{Binding Editing.SequenceText}"
+									IsReadOnly="True"
+									Background="#4022AA88"
+									Foreground="Black"
+									FontSize="14"
+									FontWeight="SemiBold"
+									Padding="10"
+									CornerRadius="8"
+									BorderBrush="#00FFD4"
+									BorderThickness="1"
+									GotFocus="SequenceBox_GotFocus"
+									LostFocus="SequenceBox_LostFocus"/>
+
+								<TextBlock Text="Click to record key sequence"
+										   FontSize="11"
+										   Foreground="#90FFFFFF"/>
+							</StackPanel>
+						</Border>
+
+						<!-- LAUNCH APP -->
+						<Border Background="#1FFFFFFF"
+								CornerRadius="8"
+								Padding="12"
+								IsVisible="{Binding IsLaunchApp}">
+							<StackPanel Spacing="6">
+								<TextBlock Text="Application Path"
+										   FontSize="13"
+										   FontWeight="SemiBold"
+										   Foreground="White"/>
+
+								<TextBox Text="{Binding Editing.ApplicationPath}"
+										 Watermark="Path to .exe"
+										 Background="#E0FFFFFF"
+										 Foreground="#111"
+										 BorderBrush="#00000040"
+										 BorderThickness="1"
+										 CornerRadius="6"
+										 Padding="8"/>
+							</StackPanel>
+						</Border>
+
+						<!-- LAUNCH WEBPAGE -->
+						<Border Background="#1FFFFFFF"
+								CornerRadius="8"
+								Padding="12"
+								IsVisible="{Binding IsLaunchWebpage}">
+							<StackPanel Spacing="6">
+								<TextBlock Text="URL"
+										   FontSize="13"
+										   FontWeight="SemiBold"
+										   Foreground="White"/>
+
+								<TextBox Text="{Binding Editing.Url}"
+										 Watermark="https://example.com"
+										 Background="#E0FFFFFF"
+										 Foreground="#111"
+										 BorderBrush="#00000040"
+										 BorderThickness="1"
+										 CornerRadius="6"
+										 Padding="8"/>
+							</StackPanel>
+						</Border>
+
+						<!-- ACTIONS -->
+						<StackPanel Orientation="Horizontal"
+            HorizontalAlignment="Right"
+            Spacing="10"
+            Margin="0 8 0 0">
+
+							<!-- DELETE -->
+							<Button Content="Delete"
+									Command="{Binding DeleteSelected}"
+									Background="#1AFFFFFF"
+									Foreground="#FF6B6B"
+									BorderBrush="#66FF6B6B"
+									BorderThickness="1"
+									CornerRadius="999"
+									FontWeight="SemiBold"
+									Padding="20 8">
+
+								<Button.Styles>
+
+									<Style Selector="Button:pointerover > ContentPresenter">
+										<Setter Property="Background" Value="#33FF6B6B"/>
+										<Setter Property="Foreground" Value="White"/>
+									</Style>
+
+									<Style Selector="Button:pressed > ContentPresenter">
+										<Setter Property="Background" Value="#44FF6B6B"/>
+									</Style>
+
+								</Button.Styles>
+							</Button>
+
+							<!-- SAVE -->
+							<Button Content="Save Changes"
+									Command="{Binding SaveSelected}"
+									Background="#c04BB9E2"
+									Foreground="White"
+									CornerRadius="999"
+									FontWeight="SemiBold"
+									Padding="22 8">
+
+								<Button.Styles>
+
+
+									<!-- Hover -->
+									<Style Selector="Button:pointerover > ContentPresenter">
+										<Setter Property="Background" Value="#704BB9E2"/>
+										<Setter Property="Foreground" Value="White"/>
+									</Style>
+
+									<!-- Pressed -->
+									<Style Selector="Button:pressed > ContentPresenter">
+										<Setter Property="Background" Value="#c01F93BE"/>
+									</Style>
+
+								</Button.Styles>
+							</Button>
+
+						</StackPanel>
 
 					</StackPanel>
+				</Border>
 
-					<!-- Sequence -->
-					<StackPanel>
-						<TextBlock Foreground="White" Text="Sequence" Margin="0 0 0 4"/>
-
-						<!-- Recorder TextBox -->
-						<TextBox
-							Text="{Binding Editing.SequenceText}"
-							IsReadOnly="True"
-							Background="#933"
-							Padding="6"
-							CornerRadius="4"
-							GotFocus="SequenceBox_GotFocus"
-							LostFocus="SequenceBox_LostFocus">
-							<TextBox.Resources>
-								<!-- focused border change -->
-								<SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#444"/>
-								<SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="#0c3"/>
-							</TextBox.Resources>
-						</TextBox>
-
-					</StackPanel>
-
-					<!-- LaunchApp: Application Path -->
-					<StackPanel IsVisible="{Binding IsLaunchApp}">
-						<TextBlock Foreground="White" Text="Application Path" Margin="0 0 0 4"/>
-						<TextBox Text="{Binding Editing.ApplicationPath}"
-                                 Watermark="Path to .exe"/>
-					</StackPanel>
-
-					<!-- LaunchWebpage: URL -->
-					<StackPanel IsVisible="{Binding IsLaunchWebpage}">
-						<TextBlock Foreground="White" Text="URL" Margin="0 0 0 4"/>
-						<TextBox Text="{Binding Editing.Url}"
-                                 Watermark="www..."/>
-					</StackPanel>
-
-					<!-- Actions -->
-					<StackPanel Orientation="Horizontal" Spacing="8">
-						<Button Content="Save"
-                                Command="{Binding SaveSelected}"
-                                Background="#3f7cff"
-                                Foreground="White"
-                                CornerRadius="4"
-                                Padding="8 4"/>
-
-						<Button Content="Delete"
-                                Command="{Binding DeleteSelected}"
-                                Background="#663333"
-                                Foreground="White"
-                                CornerRadius="4"
-                                Padding="8 4"/>
-					</StackPanel>
-
-				</StackPanel>
-				<TextBlock Text="{Binding ErrorMessage}"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Foreground="#777"
-                           FontSize="16"
-                           Margin="0 100 0 0"/>
+				<!-- ERROR / EMPTY STATE -->
+				<Border Background="#33FF4444"
+						CornerRadius="8"
+						Padding="10"
+						IsVisible="{Binding HasSelected}">
+					<TextBlock Text="{Binding ErrorMessage}"
+							   Foreground="White"
+							   FontSize="13"
+							   TextAlignment="Center"/>
+				</Border>
 
 			</StackPanel>
 		</Border>
