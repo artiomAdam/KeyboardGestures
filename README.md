@@ -22,3 +22,7 @@ It listens for key sequences and runs actions such as launching apps, opening UR
 * Avalonia UI
 * Win32 APIs (global keyboard hook)
 * Microsoft.Extensions.DependencyInjection
+
+## Download
+
+[ **Windows (x64)** Latest Release](https://github.com/artiomAdam/KeyboardGestures/releases/download/v.1.0.0/KeyboardGestures-1.0.0-beta.1-win64.zip)
