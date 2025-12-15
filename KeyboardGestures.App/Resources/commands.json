@@ -1,14 +1,30 @@
 [
   {
-    "Sequence": [ 67, 80 ],
-    "CommandType": "LaunchApp",
-    "ApplicationPath": "C:\\Program Files\\Mozilla Firefox\\firefox.exe",
-    "Description": ""
+    "Sequence": [
+      71,
+      71
+    ],
+    "CommandType": "TakeScreenshot",
+    "Description": "",
+    "ApplicationPath": null,
+    "Url": null
   },
   {
-    "Sequence": [ 160, 86 ],
-    "CommandType": "LaunchApp",
-    "ApplicationPath": "C:\\Users\\Arty\\Desktop\\Terminal.lnk",
-    "Description": ""
-  }
+    "Sequence": [
+      186
+    ],
+    "CommandType": "ToggleMute",
+    "Description": "",
+    "ApplicationPath": null,
+    "Url": null
+  },
+  {
+    "Sequence": [
+      192
+    ],
+    "CommandType": "CopyCurrentPath",
+    "Description": "",
+    "ApplicationPath": null,
+    "Url": null
+  } 
 ]
