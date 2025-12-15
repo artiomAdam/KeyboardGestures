@@ -32,6 +32,7 @@ namespace KeyboardGestures.Core.Commands
                 _registry.GetAll().Any(c => c.CommandType == cmd.CommandType))
                 throw new InvalidOperationException($"{cmd.CommandType} already exists.");
 
+            if(cmd.Sequence.Count == 0) throw new InvalidOperationException("Empty key unacceptable.");
             _registry.Register(cmd);
             SaveAll();
         }
@@ -40,6 +41,7 @@ namespace KeyboardGestures.Core.Commands
         public void UpdateCommand(CommandDefinition cmd, List<int>? oldSequence)
         {
             var newKey = cmd.Sequence;
+            if(newKey.Count == 0) throw new InvalidOperationException("Empty key unacceptable.");
 
             if (!oldSequence.SequenceEqual(newKey))
             {
