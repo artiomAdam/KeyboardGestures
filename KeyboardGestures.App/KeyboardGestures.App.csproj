@@ -7,6 +7,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	  <ApplicationIcon>Assets/app.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,7 +24,7 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<AvaloniaResource Include="Assets/Icon.png" />
+		<AvaloniaResource Include="Assets/icon.png" />
 	</ItemGroup>
 
 	<ItemGroup>

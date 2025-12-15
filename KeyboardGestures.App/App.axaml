@@ -9,7 +9,7 @@
 	
 	<TrayIcon.Icons>
 		<TrayIcons>
-			<TrayIcon Icon="avares://KeyboardGestures.App/Assets/Icon.png"
+			<TrayIcon Icon="avares://KeyboardGestures.App/Assets/icon.png"
 					  ToolTipText="Keyboard Gestures"
 					  Clicked ="OnTrayClicked"/>
 		</TrayIcons>
