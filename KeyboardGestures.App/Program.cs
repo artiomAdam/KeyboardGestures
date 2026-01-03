@@ -76,7 +76,8 @@ namespace KeyboardGestures.App
 
             var registry = new CommandRegistry();
             var jsonPath = Path.Combine(AppContext.BaseDirectory, "Resources\\commands.json");
-            services.AddSingleton<IJsonStorageService>(new JsonCommandStorageService(jsonPath));
+            //services.AddSingleton<IJsonStorageService>(new JsonCommandStorageService(jsonPath));
+            services.AddSingleton<IJsonStorage<List<CommandDefinition>>>(_ => new JsonFileStorage<List<CommandDefinition>>("Resources\\commands.json"));
 
             services.AddSingleton<CommandRegistry>();            // empty registry
             services.AddSingleton<ICommandService, CommandService>(); // service loads registry

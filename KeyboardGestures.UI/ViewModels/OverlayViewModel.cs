@@ -2,8 +2,6 @@
 using KeyboardGestures.Core.Commands;
 using ReactiveUI;
 using System.Collections.ObjectModel;
-using System.ComponentModel.Design;
-using System.Diagnostics;
 
 namespace KeyboardGestures.UI.ViewModels
 {

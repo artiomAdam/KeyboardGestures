@@ -1,6 +1,5 @@
 ﻿
 using KeyboardGestures.Core.JsonStorage;
-using System.Collections.ObjectModel;
 
 namespace KeyboardGestures.Core.Commands
 {
@@ -8,9 +7,9 @@ namespace KeyboardGestures.Core.Commands
     public class CommandService : ICommandService
     {
         private readonly CommandRegistry _registry;
-        private readonly IJsonStorageService _storage;
+        private readonly IJsonStorage<List<CommandDefinition>> _storage;
 
-        public CommandService(CommandRegistry registry, IJsonStorageService storage)
+        public CommandService(CommandRegistry registry, IJsonStorage<List<CommandDefinition>> storage)
         {
             _registry = registry;
             _storage = storage;

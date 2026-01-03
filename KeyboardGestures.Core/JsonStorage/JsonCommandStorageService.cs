@@ -4,33 +4,17 @@ using System.Text.Json.Serialization;
 
 namespace KeyboardGestures.Core.JsonStorage
 {
-    public class JsonCommandStorageService : IJsonStorageService
+    public class JsonCommandStorageService
     {
-        private readonly string _path;
-        private readonly JsonSerializerOptions _options;
+        private readonly IJsonStorage<List<CommandDefinition>> _storage;
 
-        public JsonCommandStorageService(string path)
+        public JsonCommandStorageService(IJsonStorage<List<CommandDefinition>> storage)
         {
-            _path = path;
-            _options = new JsonSerializerOptions
-            {
-                WriteIndented = true,
-                PropertyNameCaseInsensitive = true,
-                Converters = { new JsonStringEnumConverter() }
-            };
+            _storage = storage;
         }
 
-        public List<CommandDefinition> Load()
-        {
-            if (!File.Exists(_path)) return new();
-            var json = File.ReadAllText(_path);
-            return JsonSerializer.Deserialize<List<CommandDefinition>>(json, _options) ?? new();
-        }
+        public List<CommandDefinition> Load() => _storage.Load();
 
-        public void Save(IEnumerable<CommandDefinition> commands)
-        {
-            var json = JsonSerializer.Serialize(commands, _options);
-            File.WriteAllText(_path, json);
-        }
+        public void Save(IEnumerable<CommandDefinition> commands) => _storage.Save(commands.ToList());
     }
 }
