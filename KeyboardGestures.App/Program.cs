@@ -5,27 +5,21 @@ using KeyboardGestures.Core.Commands;
 using KeyboardGestures.Core.Gestures;
 using KeyboardGestures.Core.JsonStorage;
 using KeyboardGestures.Core.KeyboardHook;
+using KeyboardGestures.Core.Settings;
 using KeyboardGestures.UI.ExecutionPlatform;
 using KeyboardGestures.UI.ViewModels;
 using KeyboardGestures.UI.Windows;
 using Microsoft.Extensions.DependencyInjection;
-using ReactiveUI;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Reactive.Concurrency;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+
 
 namespace KeyboardGestures.App
 {
     internal class Program
     {
         public static IServiceProvider Services { get; private set; }
-        // Initialization code. Don't use any Avalonia, third-party APIs or any
-        // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
-        // yet and stuff might break.
         [STAThread]
         public static void Main(string[] args)
         {
@@ -70,29 +64,27 @@ namespace KeyboardGestures.App
         {
             var services = new ServiceCollection();
 
-
+            // win32 keyboard hook
             services.AddSingleton<IKeyboardHookService, WindowsKeyboardHookService>();
+
+            // storage services
+            var jsonCommandsPath = Path.Combine(AppContext.BaseDirectory, "Resources\\commands.json");
+            var jsonSettingsPath = Path.Combine(AppContext.BaseDirectory, "Resources\\settings.json");
+            services.AddSingleton<IJsonStorage<List<CommandDefinition>>>(_ => new JsonFileStorage<List<CommandDefinition>>(jsonCommandsPath));
+            services.AddSingleton<IJsonStorage<AppSettings>>(_ => new JsonFileStorage<AppSettings>(jsonSettingsPath));
+
+            // commands and gestures
             services.AddSingleton<IGestureInterpreter, GestureInterpreter>();
-
-            var registry = new CommandRegistry();
-            var jsonPath = Path.Combine(AppContext.BaseDirectory, "Resources\\commands.json");
-            //services.AddSingleton<IJsonStorageService>(new JsonCommandStorageService(jsonPath));
-            services.AddSingleton<IJsonStorage<List<CommandDefinition>>>(_ => new JsonFileStorage<List<CommandDefinition>>("Resources\\commands.json"));
-
-            services.AddSingleton<CommandRegistry>();            // empty registry
-            services.AddSingleton<ICommandService, CommandService>(); // service loads registry
-
+            services.AddSingleton<CommandRegistry>();
+            services.AddSingleton<ICommandService, CommandService>();
             services.AddSingleton<ICommandExecutor, CommandExecutor>();
             services.AddSingleton<GestureHandler>();
-
             services.AddSingleton<IExecutionPlatform, CommandExecutionPlatform>();
 
             // windows:
             services.AddSingleton<TrayMenuWindow>();
-
             services.AddSingleton<OverlayViewModel>();
             services.AddSingleton<OverlayWindow>();
-
             services.AddSingleton<SettingsViewModel>();
             services.AddSingleton<SettingsWindow>();
             
@@ -100,7 +92,7 @@ namespace KeyboardGestures.App
             Services = services.BuildServiceProvider();
         }
 
-        // Avalonia configuration, don't remove; also used by visual designer.
+       
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
                 .UsePlatformDetect()
