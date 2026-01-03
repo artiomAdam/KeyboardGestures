@@ -72,6 +72,8 @@ namespace KeyboardGestures.App
             var jsonSettingsPath = Path.Combine(AppContext.BaseDirectory, "Resources\\settings.json");
             services.AddSingleton<IJsonStorage<List<CommandDefinition>>>(_ => new JsonFileStorage<List<CommandDefinition>>(jsonCommandsPath));
             services.AddSingleton<IJsonStorage<AppSettings>>(_ => new JsonFileStorage<AppSettings>(jsonSettingsPath));
+            services.AddSingleton<CommandStorageService>();
+            services.AddSingleton<SettingsStorageService>();
 
             // commands and gestures
             services.AddSingleton<IGestureInterpreter, GestureInterpreter>();

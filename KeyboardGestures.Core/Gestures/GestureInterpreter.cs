@@ -1,4 +1,6 @@
 ﻿using KeyboardGestures.Core.Events;
+using KeyboardGestures.Core.JsonStorage;
+using KeyboardGestures.Core.Settings;
 using System.Diagnostics;
 
 
@@ -9,7 +11,7 @@ namespace KeyboardGestures.Core.Gestures
         private const int VK_CONTROL = 0x11;
         private const int VK_SPACE = 0x20;
 
-        private bool _ctrlDown = false;
+        private bool _activationKeyDown = false;
         private readonly List<int> _sequence = new();
         public event Action? OverlayActivated;
         public event Action? OverlayDeactivated;
@@ -20,6 +22,12 @@ namespace KeyboardGestures.Core.Gestures
         private readonly HashSet<int> _pressedKeys = new();
         private bool _overlayActive = false;
 
+        private readonly AppSettings _settings;
+
+        public GestureInterpreter(SettingsStorageService settingsStorage)
+        {
+            _settings = settingsStorage.Load();
+        }
 
         public void OnKeyEvent(KeyEvent ev)
         {
@@ -38,38 +46,38 @@ namespace KeyboardGestures.Core.Gestures
             vk = NormalizeCtrl(vk);
             if (_pressedKeys.Contains(vk)) return;
             _pressedKeys.Add(vk);
-            if (vk == VK_CONTROL)
+            if (vk == _settings.ActivationKey)
             {
-                if(!_ctrlDown)
+                if(!_activationKeyDown)
                 {
-                    _ctrlDown = true;
+                    _activationKeyDown = true;
                     _sequence.Clear();
                 }
                 return;
             }
 
-            if (_ctrlDown && vk == VK_SPACE)
+            if (_activationKeyDown && vk == VK_SPACE)
             {
                 OverlayActivated?.Invoke();
                 _overlayActive = true;
                 return;
             }
 
-            if (!_ctrlDown) return;
+            if (!_activationKeyDown) return;
 
             _sequence.Add(vk);
-            Debug.WriteLine("Sequence: " + string.Join(", ", _sequence));
+           // Debug.WriteLine("Sequence: " + string.Join(", ", _sequence));
         }
 
         private void HandleKeyUp(int vk)
         {
             vk = NormalizeCtrl(vk);
             _pressedKeys.Remove(vk);
-            if(vk == VK_CONTROL)
+            if(vk == _settings.ActivationKey)
             {
-                if(_ctrlDown)
+                if(_activationKeyDown)
                 {
-                    _ctrlDown = false;
+                    _activationKeyDown = false;
                     if (_overlayActive)
                     {
                         _overlayActive = false;
@@ -90,14 +98,20 @@ namespace KeyboardGestures.Core.Gestures
             if (_sequence.Count == 0) return;
             var seq = _sequence.ToList(); // clone
             _sequence.Clear();
-            Debug.WriteLine($"Sequence COMPLETE: [{string.Join(", ", seq)}]");
+            //Debug.WriteLine($"Sequence COMPLETE: [{string.Join(", ", seq)}]");
 
             SequenceCompleted?.Invoke( seq );
         }
 
         private static int NormalizeCtrl(int vk)
         {
-            return (vk == 0xA2 || vk == 0xA3) ? 0x11 : vk;
+            return vk switch
+            {
+                0xA2 or 0xA3 => 0x11, // ctrl
+                0xA0 or 0xA1 => 0x10, //shift
+                0xA4 or 0xA5 => 0x12, //alt
+                _ => vk
+            }; // TODO: see if other dupes need to be added
         }
     }
 }

@@ -4,11 +4,11 @@ using System.Text.Json.Serialization;
 
 namespace KeyboardGestures.Core.JsonStorage
 {
-    public class JsonCommandStorageService
+    public class CommandStorageService
     {
         private readonly IJsonStorage<List<CommandDefinition>> _storage;
 
-        public JsonCommandStorageService(IJsonStorage<List<CommandDefinition>> storage)
+        public CommandStorageService(IJsonStorage<List<CommandDefinition>> storage)
         {
             _storage = storage;
         }

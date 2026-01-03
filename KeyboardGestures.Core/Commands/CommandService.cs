@@ -7,9 +7,9 @@ namespace KeyboardGestures.Core.Commands
     public class CommandService : ICommandService
     {
         private readonly CommandRegistry _registry;
-        private readonly IJsonStorage<List<CommandDefinition>> _storage;
+        private readonly CommandStorageService _storage;
 
-        public CommandService(CommandRegistry registry, IJsonStorage<List<CommandDefinition>> storage)
+        public CommandService(CommandRegistry registry, CommandStorageService storage)
         {
             _registry = registry;
             _storage = storage;
