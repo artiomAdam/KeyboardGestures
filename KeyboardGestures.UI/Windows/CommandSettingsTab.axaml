@@ -1,4 +1,4 @@
-<Window
+<UserControl
     x:Class="KeyboardGestures.UI.Windows.CommandSettingsTab"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -357,4 +357,4 @@
 		</Border>
 
 	</Grid>
-</Window>
+</UserControl>

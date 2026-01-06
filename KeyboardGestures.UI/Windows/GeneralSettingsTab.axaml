@@ -1,7 +1,155 @@
-<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        x:Class="KeyboardGestures.UI.Windows.GeneralSettingsTab">
-	<Border Width="400" Height="300" Background ="White" />
-</Window>
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="KeyboardGestures.UI.Windows.GeneralSettingsTab">
+
+	<UserControl.Styles>
+		<Styles>
+
+			<Style Selector="Border.outer-shell">
+				<Setter Property="Background" Value="#A02B2B2B"/>
+				<Setter Property="CornerRadius" Value="14"/>
+				<Setter Property="Padding" Value="18"/>
+				<Setter Property="HorizontalAlignment" Value="Left"/>
+				<Setter Property="Width" Value="520"/>
+				<Setter Property="Margin" Value="0,6"/>
+			</Style>
+
+			<Style Selector="Border.inner-card">
+				<Setter Property="Background" Value="#1FFFFFFF"/>
+				<Setter Property="CornerRadius" Value="12"/>
+				<Setter Property="Padding" Value="20"/>
+			</Style>
+
+			<Style Selector="TextBlock.section-title">
+				<Setter Property="FontSize" Value="18"/>
+				<Setter Property="FontWeight" Value="SemiBold"/>
+				<Setter Property="Foreground" Value="White"/>
+				<Setter Property="Margin" Value="0,0,0,16"/>
+			</Style>
+
+			<Style Selector="Grid.setting-row">
+				<Setter Property="Margin" Value="0,0,0,16"/>
+			</Style>
+
+			<Style Selector="TextBlock.setting-label">
+				<Setter Property="FontSize" Value="14"/>
+				<Setter Property="Foreground" Value="White"/>
+			</Style>
+
+			<Style Selector="TextBlock.setting-description">
+				<Setter Property="FontSize" Value="12"/>
+				<Setter Property="Foreground" Value="#CCCCCC"/>
+				<Setter Property="Margin" Value="0,4,0,0"/>
+			</Style>
+
+			<Style Selector="TextBox.key-input">
+				<Setter Property="Width" Value="64"/>
+				<Setter Property="Height" Value="34"/>
+				<Setter Property="FontSize" Value="16"/>
+				<Setter Property="TextAlignment" Value="Center"/>
+				<Setter Property="VerticalContentAlignment" Value="Center"/>
+				<Setter Property="CornerRadius" Value="8"/>
+				<Setter Property="Background" Value="#333"/>
+				<Setter Property="Foreground" Value="White"/>
+				<Setter Property="BorderBrush" Value="#555"/>
+				<Setter Property="MaxLength" Value="1"/>
+			</Style>
+
+			<Style Selector="Separator">
+				<Setter Property="Margin" Value="0,12"/>
+				<Setter Property="Background" Value="#30FFFFFF"/>
+			</Style>
+
+			<Style Selector="CheckBox">
+				<Setter Property="Foreground" Value="White"/>
+			</Style>
+
+			<Style Selector="Border.action-bar">
+				<Setter Property="BorderThickness" Value="0,1,0,0"/>
+				<Setter Property="BorderBrush" Value="#30FFFFFF"/>
+				<Setter Property="Padding" Value="12,10"/>
+			</Style>
+
+			<Style Selector="Button.settings-btn">
+				<Setter Property="MinWidth" Value="90"/>
+				<Setter Property="Height" Value="32"/>
+			</Style>
+
+
+		</Styles>
+	</UserControl.Styles>
+
+	<Border Classes="outer-shell">
+
+		<Border Classes="inner-card">
+			<Grid RowDefinitions="*,Auto">
+
+				<!-- Scrollable content -->
+				<ScrollViewer Grid.Row="0"
+							  VerticalScrollBarVisibility="Auto">
+					<StackPanel>
+
+						<TextBlock Text="General Settings"
+								   Classes="section-title"/>
+
+						<!-- Activation Key -->
+						<Grid Classes="setting-row"
+							  ColumnDefinitions="*,Auto">
+							<StackPanel>
+								<TextBlock Text="Activation Key"
+										   Classes="setting-label"/>
+								<TextBlock Text="Single key used to activate the command overlay"
+										   Classes="setting-description"/>
+							</StackPanel>
+
+							<TextBox Grid.Column="1"
+									 Classes="key-input"
+									 Text="{Binding ActivationKeyText}"/>
+						</Grid>
+
+						<Separator/>
+
+						<!-- Launch on startup -->
+						<Grid Classes="setting-row"
+							  ColumnDefinitions="*,Auto">
+							<StackPanel>
+								<TextBlock Text="Launch on startup"
+										   Classes="setting-label"/>
+								<TextBlock Text="Automatically start KeyboardGestures when Windows starts"
+										   Classes="setting-description"/>
+							</StackPanel>
+
+							<CheckBox Grid.Column="1"
+									  IsChecked="{Binding LaunchOnStartup}"/>
+						</Grid>
+
+						<Separator/>
+
+					</StackPanel>
+				</ScrollViewer>
+
+				<!-- Action bar -->
+				<Border Grid.Row="1"
+						Classes="action-bar">
+					<StackPanel Orientation="Horizontal"
+								HorizontalAlignment="Right"
+								Spacing="10">
+
+						<Button Content="Cancel"
+								Classes="settings-btn"
+								/>
+
+						<Button Content="Apply"
+								Classes="settings-btn"
+								IsDefault="True"
+								/>
+
+					</StackPanel>
+				</Border>
+
+			</Grid>
+		</Border>
+
+	</Border>
+
+</UserControl>

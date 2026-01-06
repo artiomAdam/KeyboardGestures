@@ -8,7 +8,7 @@
         Height="600"
 	    CanResize="False"
         Title="Settings"
-        Background="#7a000000"
+        Background="#aa000000"
 	    TransparencyLevelHint="AcrylicBlur">
 
 

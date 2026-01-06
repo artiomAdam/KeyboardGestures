@@ -91,10 +91,7 @@ namespace KeyboardGestures.App
             // windows:
             services.AddSingleton<TrayMenuWindow>();
             services.AddSingleton<OverlayWindow>();
-            
             services.AddSingleton<SettingsWindow>();
-            services.AddSingleton<GeneralSettingsTab>();
-            services.AddSingleton<CommandSettingsTab>();
 
             // vms
             services.AddSingleton<GeneralSettingsViewModel>();
