@@ -1,13 +1,17 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
+using KeyboardGestures.UI.ViewModels;
 
-namespace KeyboardGestures.UI;
+namespace KeyboardGestures.UI.Windows;
 
 public partial class SettingsWindow : Window
 {
     public SettingsWindow()
     {
         InitializeComponent();
+    }
+    public SettingsWindow(CommandSettingsViewModel commandSettingsVM, GeneralSettingsViewModel generalSettingsVM) : this()
+    {
+       
+       DataContext = new SettingsViewModel(commandSettingsVM, generalSettingsVM);
     }
 }

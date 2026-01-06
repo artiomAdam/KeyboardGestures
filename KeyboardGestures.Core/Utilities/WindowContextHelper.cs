@@ -1,7 +1,6 @@
 ﻿
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace KeyboardGestures.Core.Utilities
 {
@@ -26,9 +25,6 @@ namespace KeyboardGestures.Core.Utilities
             if (string.IsNullOrWhiteSpace(title))
                 return null;
 
-            // -----------------------------
-            // 1) Starts with a Windows path? Handle Explorer path correctly
-            // -----------------------------
             if (title.Length > 3 &&
                 char.IsLetter(title[0]) &&
                 title[1] == ':' &&
@@ -37,9 +33,7 @@ namespace KeyboardGestures.Core.Utilities
                 return CutAfterSeparator(title);
             }
 
-            // -----------------------------
-            // 2) Browser titles: strip after dash (en/em/etc.)
-            // -----------------------------
+
             return CutAfterSeparator(title);
         }
 

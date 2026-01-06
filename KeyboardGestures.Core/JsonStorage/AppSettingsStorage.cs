@@ -2,11 +2,11 @@
 
 namespace KeyboardGestures.Core.JsonStorage
 {
-    public class SettingsStorageService
+    public class AppSettingsStorage
     {
         private readonly IJsonStorage<AppSettings> _storage;
 
-        public SettingsStorageService(IJsonStorage<AppSettings> storage)
+        public AppSettingsStorage(IJsonStorage<AppSettings> storage)
         {
             _storage = storage;
         }

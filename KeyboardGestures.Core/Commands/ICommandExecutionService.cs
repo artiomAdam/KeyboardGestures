@@ -1,6 +1,6 @@
 ﻿namespace KeyboardGestures.Core.Commands
 {
-    public interface IExecutionPlatform
+    public interface ICommandExecutionService
     {
         Task LaunchApp(string? path);
         Task LaunchWebpage(string? url);

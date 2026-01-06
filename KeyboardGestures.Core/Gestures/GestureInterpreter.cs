@@ -24,7 +24,7 @@ namespace KeyboardGestures.Core.Gestures
 
         private readonly AppSettings _settings;
 
-        public GestureInterpreter(SettingsStorageService settingsStorage)
+        public GestureInterpreter(AppSettingsStorage settingsStorage)
         {
             _settings = settingsStorage.Load();
         }

@@ -1,14 +1,12 @@
 ﻿using KeyboardGestures.Core.Commands;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace KeyboardGestures.Core.JsonStorage
 {
-    public class CommandStorageService
+    public class CommandStorage
     {
         private readonly IJsonStorage<List<CommandDefinition>> _storage;
 
-        public CommandStorageService(IJsonStorage<List<CommandDefinition>> storage)
+        public CommandStorage(IJsonStorage<List<CommandDefinition>> storage)
         {
             _storage = storage;
         }

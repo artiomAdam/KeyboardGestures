@@ -6,16 +6,22 @@ namespace KeyboardGestures.UI.ViewModels
     public class GeneralSettingsViewModel : ReactiveObject
     {
 
-        private bool _launchOnStartup;
-        public bool LaunchOnStartup
+        private readonly IAppSettingsService _settings;
+        public int ActivationKey
         {
-            get => _launchOnStartup;
-            set => this.RaiseAndSetIfChanged(ref _launchOnStartup, value);
+            get => _settings.Current.ActivationKey;
+            set
+            {
+                if (_settings.Current.ActivationKey == value) return;
+                _settings.Current.ActivationKey = value;
+                this.RaisePropertyChanged();
+            }
         }
 
-        public GeneralSettingsViewModel(AppSettings settings)
-        {
 
+        public GeneralSettingsViewModel(IAppSettingsService settingsService)
+        {
+            _settings = settingsService;
         }
     }
 }

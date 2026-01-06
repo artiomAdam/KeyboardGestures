@@ -2,8 +2,70 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="KeyboardGestures.UI.SettingsWindow"
-        Title="SettingsWindow">
-  Welcome to Avalonia!
+        x:Class="KeyboardGestures.UI.Windows.SettingsWindow"
+		xmlns:local="clr-namespace:KeyboardGestures.UI.Windows"
+		Width="900"
+        Height="600"
+	    CanResize="False"
+        Title="Settings"
+        Background="#7a000000"
+	    TransparencyLevelHint="AcrylicBlur">
+
+
+	<TabControl SelectedItem="{Binding SelectedTab}">
+		<TabControl.ItemsPanel>
+			<ItemsPanelTemplate>
+				<StackPanel Orientation="Horizontal" Spacing="-16"/>
+			</ItemsPanelTemplate>
+		</TabControl.ItemsPanel>
+		<TabControl.Styles>
+			
+			<!-- Base header container -->
+			<Style Selector="TabItem Border.tabHeader">
+				<Setter Property="Background" Value="Transparent"/>
+				<Setter Property="CornerRadius" Value="10,10,0,0"/>
+				<Setter Property="Padding" Value="12,6"/>
+			</Style>
+
+			<!-- Hover -->
+			<Style Selector="TabItem:pointerover Border.tabHeader">
+				<Setter Property="Background" Value="#22FFFFFF"/>
+			</Style>
+
+			<!-- Selected -->
+			<Style Selector="TabItem:selected Border.tabHeader">
+				<Setter Property="Background" Value="#33FFFFFF"/>
+			</Style>
+
+			<!-- Selected + hover -->
+			<Style Selector="TabItem:selected:pointerover Border.tabHeader">
+				<Setter Property="Background" Value="#44FFFFFF"/>
+			</Style>
+
+		</TabControl.Styles>
+
+		<TabItem>
+			<TabItem.Header>
+				<Border Classes="tabHeader">
+					<TextBlock Text="General"
+							   Foreground="White"
+							   FontWeight="Bold"/>
+				</Border>
+			</TabItem.Header>
+
+			<local:GeneralSettingsTab DataContext="{Binding GeneralSettings}" />
+		</TabItem>
+
+		<TabItem>
+			<TabItem.Header>
+				<Border Classes="tabHeader">
+					<TextBlock Text="Commands"
+							   Foreground="White"
+							   FontWeight="Bold"/>
+				</Border>
+			</TabItem.Header>
+
+			<local:CommandSettingsTab DataContext="{Binding CommandSettings}" />
+		</TabItem>
+	</TabControl>
 </Window>

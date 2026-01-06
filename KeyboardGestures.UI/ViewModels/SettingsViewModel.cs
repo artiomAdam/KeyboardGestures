@@ -18,6 +18,7 @@ namespace KeyboardGestures.UI.ViewModels
         {
             CommandSettings = commandSettingsVM;
             GeneralSettings = generalSettingsVM;
+            
             SelectedTab = GeneralSettings;
         }
     }

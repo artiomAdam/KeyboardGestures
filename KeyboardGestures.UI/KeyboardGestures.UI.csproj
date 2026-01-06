@@ -20,8 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Windows\CommandSettingsWindow.axaml.cs">
-      <DependentUpon>CommandSettingsWindow.axaml</DependentUpon>
+    <Compile Update="Windows\CommandSettingsTab.axaml.cs">
+      <DependentUpon>CommandSettingsTab.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
 

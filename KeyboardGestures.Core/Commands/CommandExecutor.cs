@@ -1,5 +1,4 @@
-﻿using KeyboardGestures.Core.Utilities;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 
 namespace KeyboardGestures.Core.Commands

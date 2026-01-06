@@ -4,14 +4,16 @@ using KeyboardGestures.UI.ViewModels;
 
 namespace KeyboardGestures.UI.Windows;
 
-public partial class SettingsWindow : Window
+public partial class CommandSettingsTab : UserControl
 {
-    public SettingsWindow(CommandSettingsViewModel vm)
+    public CommandSettingsTab()
     {
         InitializeComponent();
-        DataContext = vm;
     }
 
+
+    private CommandSettingsViewModel? Vm
+        => DataContext as CommandSettingsViewModel;
     private void SequenceBox_GotFocus(object? sender, RoutedEventArgs e)
     {
         if (DataContext is CommandSettingsViewModel vm)
@@ -24,9 +26,9 @@ public partial class SettingsWindow : Window
             vm.OnSequenceInputLostFocus();
     }
 
-    protected override void OnClosing(WindowClosingEventArgs e)
-    {
-        e.Cancel = true;
-        Hide();
-    }
+    //protected override void OnClosing(WindowClosingEventArgs e)
+    //{
+    //    e.Cancel = true;
+    //    Hide();
+    //}
 }

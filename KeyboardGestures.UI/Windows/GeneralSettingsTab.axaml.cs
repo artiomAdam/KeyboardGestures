@@ -1,10 +1,8 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace KeyboardGestures.UI;
+namespace KeyboardGestures.UI.Windows;
 
-public partial class GeneralSettingsTab : Window
+public partial class GeneralSettingsTab : UserControl
 {
     public GeneralSettingsTab()
     {

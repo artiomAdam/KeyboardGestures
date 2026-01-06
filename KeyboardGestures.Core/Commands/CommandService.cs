@@ -7,9 +7,9 @@ namespace KeyboardGestures.Core.Commands
     public class CommandService : ICommandService
     {
         private readonly CommandRegistry _registry;
-        private readonly CommandStorageService _storage;
+        private readonly CommandStorage _storage;
 
-        public CommandService(CommandRegistry registry, CommandStorageService storage)
+        public CommandService(CommandRegistry registry, CommandStorage storage)
         {
             _registry = registry;
             _storage = storage;

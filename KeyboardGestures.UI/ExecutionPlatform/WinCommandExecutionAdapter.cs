@@ -1,7 +1,4 @@
-﻿using Avalonia.Controls;
-using Avalonia.Input.Platform;
-using Avalonia.Media.Imaging;
-using KeyboardGestures.Core.Commands;
+﻿using KeyboardGestures.Core.Commands;
 using KeyboardGestures.Core.Utilities;
 using System.Diagnostics;
 using System.Drawing;
@@ -11,7 +8,7 @@ using System.Text;
 
 namespace KeyboardGestures.UI.ExecutionPlatform
 {
-    public class CommandExecutionPlatform : IExecutionPlatform
+    public class WinCommandExecutionAdapter : ICommandExecutionService
     {
 
         public Task LaunchApp(string? path)
@@ -66,18 +63,14 @@ namespace KeyboardGestures.UI.ExecutionPlatform
 
             return Task.Run(() =>
             {
-                // Convert string → UTF-16 → unmanaged block
-                var bytes = Encoding.Unicode.GetBytes(text + "\0"); // null-terminated
+                var bytes = Encoding.Unicode.GetBytes(text + "\0");
                 IntPtr ptr = Marshal.AllocHGlobal(bytes.Length);
                 Marshal.Copy(bytes, 0, ptr, bytes.Length);
 
-                // Write to clipboard
                 OpenClipboard(IntPtr.Zero);
                 EmptyClipboard();
                 SetClipboardData(CF_UNICODETEXT, ptr);
                 CloseClipboard();
-
-                // Windows clipboard now owns ptr — DO NOT free it.
             });
         }
 
@@ -145,7 +138,6 @@ namespace KeyboardGestures.UI.ExecutionPlatform
 
                 CloseClipboard();
 
-                // Windows clipboard now owns both memory blocks.
             });
         }
 

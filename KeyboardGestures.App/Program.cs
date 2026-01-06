@@ -6,7 +6,9 @@ using KeyboardGestures.Core.Gestures;
 using KeyboardGestures.Core.JsonStorage;
 using KeyboardGestures.Core.KeyboardHook;
 using KeyboardGestures.Core.Settings;
+using KeyboardGestures.UI;
 using KeyboardGestures.UI.ExecutionPlatform;
+using KeyboardGestures.UI.Services;
 using KeyboardGestures.UI.ViewModels;
 using KeyboardGestures.UI.Windows;
 using Microsoft.Extensions.DependencyInjection;
@@ -67,13 +69,13 @@ namespace KeyboardGestures.App
             // win32 keyboard hook
             services.AddSingleton<IKeyboardHookService, WindowsKeyboardHookService>();
 
-            // storage services
+            // storage
             var jsonCommandsPath = Path.Combine(AppContext.BaseDirectory, "Resources\\commands.json");
             var jsonSettingsPath = Path.Combine(AppContext.BaseDirectory, "Resources\\settings.json");
             services.AddSingleton<IJsonStorage<List<CommandDefinition>>>(_ => new JsonFileStorage<List<CommandDefinition>>(jsonCommandsPath));
             services.AddSingleton<IJsonStorage<AppSettings>>(_ => new JsonFileStorage<AppSettings>(jsonSettingsPath));
-            services.AddSingleton<CommandStorageService>();
-            services.AddSingleton<SettingsStorageService>();
+            services.AddSingleton<CommandStorage>();
+            services.AddSingleton<AppSettingsStorage>();
 
             // commands and gestures
             services.AddSingleton<IGestureInterpreter, GestureInterpreter>();
@@ -81,15 +83,24 @@ namespace KeyboardGestures.App
             services.AddSingleton<ICommandService, CommandService>();
             services.AddSingleton<ICommandExecutor, CommandExecutor>();
             services.AddSingleton<GestureHandler>();
-            services.AddSingleton<IExecutionPlatform, CommandExecutionPlatform>();
+            services.AddSingleton<ICommandExecutionService, WinCommandExecutionAdapter>();
+
+            // other services
+            services.AddSingleton<IAppSettingsService, AppSettingsService>();
 
             // windows:
             services.AddSingleton<TrayMenuWindow>();
-            services.AddSingleton<OverlayViewModel>();
             services.AddSingleton<OverlayWindow>();
-            services.AddSingleton<CommandSettingsViewModel>();
-            services.AddSingleton<SettingsWindow>();
             
+            services.AddSingleton<SettingsWindow>();
+            services.AddSingleton<GeneralSettingsTab>();
+            services.AddSingleton<CommandSettingsTab>();
+
+            // vms
+            services.AddSingleton<GeneralSettingsViewModel>();
+            services.AddSingleton<CommandSettingsViewModel>();
+            services.AddSingleton<OverlayViewModel>();
+
 
             Services = services.BuildServiceProvider();
         }
