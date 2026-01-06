@@ -6,8 +6,8 @@ namespace KeyboardGestures.Core.Commands
 {
     public class CommandExecutor : ICommandExecutor
     {
-        private readonly IExecutionPlatform _executionPlatform;
-        public CommandExecutor(IExecutionPlatform executionPlatform)
+        private readonly ICommandExecutionService _executionPlatform;
+        public CommandExecutor(ICommandExecutionService executionPlatform)
         {
             _executionPlatform = executionPlatform;
         }

@@ -19,6 +19,12 @@
     <ProjectReference Include="..\KeyboardGestures.Core\KeyboardGestures.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Windows\CommandSettingsWindow.axaml.cs">
+      <DependentUpon>CommandSettingsWindow.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
 
 	
 

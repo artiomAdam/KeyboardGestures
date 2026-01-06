@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace KeyboardGestures.UI;
 
-public partial class SettingsWindow : Window
+public partial class GeneralSettingsTab : Window
 {
-    public SettingsWindow()
+    public GeneralSettingsTab()
     {
         InitializeComponent();
     }
