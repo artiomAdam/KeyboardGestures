@@ -1,4 +1,5 @@
 ﻿using ReactiveUI;
+using System.Reactive;
 
 namespace KeyboardGestures.UI.ViewModels
 {

@@ -116,7 +116,6 @@ namespace KeyboardGestures.UI.ViewModels
             if (vk == 0x11 || vk == 0xA2 || vk == 0xA3)
                 return;
             Editing?.AddToSequence(vk);
-
         }
 
         private void BeginRecording()

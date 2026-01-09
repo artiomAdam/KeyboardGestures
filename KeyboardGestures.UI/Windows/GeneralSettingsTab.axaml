@@ -102,9 +102,12 @@
 										   Classes="setting-description"/>
 							</StackPanel>
 
-							<TextBox Grid.Column="1"
-									 Classes="key-input"
-									 Text="{Binding ActivationKeyText}"/>
+							<TextBox Classes="key-input"
+									 Text="{Binding ActivationKeyDisplay}"
+									 IsReadOnly="True"
+									 Focusable="True"
+									 GotFocus="OnActivationKeyFocus"
+									 LostFocus="OnActivationKeyLostFocus"/>
 						</Grid>
 
 						<Separator/>
@@ -137,12 +140,11 @@
 
 						<Button Content="Cancel"
 								Classes="settings-btn"
-								/>
+								Command="{Binding CancelCommand}"/>
 
 						<Button Content="Apply"
 								Classes="settings-btn"
-								IsDefault="True"
-								/>
+								Command="{Binding ApplyCommand}"/>
 
 					</StackPanel>
 				</Border>

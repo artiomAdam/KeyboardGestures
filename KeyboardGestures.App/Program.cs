@@ -48,7 +48,7 @@ namespace KeyboardGestures.App
                         {
                             if (overlay is not null)
                             { 
-                                await overlay.CloseOverlay();
+                                await overlay.CloseOverlay(); 
                                 overlay = null;
                             }
                             
@@ -74,6 +74,7 @@ namespace KeyboardGestures.App
             var jsonSettingsPath = Path.Combine(AppContext.BaseDirectory, "Resources\\settings.json");
             services.AddSingleton<IJsonStorage<List<CommandDefinition>>>(_ => new JsonFileStorage<List<CommandDefinition>>(jsonCommandsPath));
             services.AddSingleton<IJsonStorage<AppSettings>>(_ => new JsonFileStorage<AppSettings>(jsonSettingsPath));
+            services.AddSingleton<AppSettings>(sp => sp.GetRequiredService<AppSettingsStorage>().Load());
             services.AddSingleton<CommandStorage>();
             services.AddSingleton<AppSettingsStorage>();
 
@@ -86,7 +87,7 @@ namespace KeyboardGestures.App
             services.AddSingleton<ICommandExecutionService, WinCommandExecutionAdapter>();
 
             // other services
-            services.AddSingleton<IAppSettingsService, AppSettingsService>();
+            services.AddSingleton<AppSettingsService>();
 
             // windows:
             services.AddSingleton<TrayMenuWindow>();

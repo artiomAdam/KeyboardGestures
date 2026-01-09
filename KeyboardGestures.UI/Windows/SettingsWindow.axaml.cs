@@ -14,4 +14,10 @@ public partial class SettingsWindow : Window
        
        DataContext = new SettingsViewModel(commandSettingsVM, generalSettingsVM);
     }
+
+    protected override void OnClosing(WindowClosingEventArgs e)
+    {
+        e.Cancel = true;
+        Hide();
+    }  
 }

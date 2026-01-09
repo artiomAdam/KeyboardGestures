@@ -12,6 +12,6 @@ namespace KeyboardGestures.Core.JsonStorage
         }
 
         public AppSettings Load() => _storage.Load();
-        public void Save(AppSettings appSettings) => _storage.Save(appSettings);
+        public void Save(AppSettings appSettings) =>  _storage.Save(appSettings);
     }
 }

@@ -1,8 +1,17 @@
-﻿namespace KeyboardGestures.Core.Settings
+﻿using KeyboardGestures.Core.Gestures;
+
+namespace KeyboardGestures.Core.Settings
 {
     public class AppSettings
     {
-        public int ActivationKey { get; set; } = 0x11; // TODO: add a reset to default
+        private int _activationKey = 0x11;
+
+        public int ActivationKey
+        {
+            get => _activationKey;
+            set => _activationKey = GestureInterpreter.NormalizeKey(value);
+        } // TODO: add a reset to default
+        public bool LaunchOnStartup { get; set; } = false;
     }
 }
    

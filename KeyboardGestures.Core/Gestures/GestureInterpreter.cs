@@ -8,7 +8,7 @@ namespace KeyboardGestures.Core.Gestures
 {
     public class GestureInterpreter : IGestureInterpreter
     {
-        private const int VK_CONTROL = 0x11;
+        //private const int VK_CONTROL = 0x11;
         private const int VK_SPACE = 0x20;
 
         private bool _activationKeyDown = false;
@@ -24,9 +24,9 @@ namespace KeyboardGestures.Core.Gestures
 
         private readonly AppSettings _settings;
 
-        public GestureInterpreter(AppSettingsStorage settingsStorage)
+        public GestureInterpreter(AppSettings settings)
         {
-            _settings = settingsStorage.Load();
+            _settings = settings;
         }
 
         public void OnKeyEvent(KeyEvent ev)
@@ -43,7 +43,7 @@ namespace KeyboardGestures.Core.Gestures
 
         private void HandleKeyDown(int vk)
         {
-            vk = NormalizeCtrl(vk);
+            vk = NormalizeKey(vk);
             if (_pressedKeys.Contains(vk)) return;
             _pressedKeys.Add(vk);
             if (vk == _settings.ActivationKey)
@@ -71,7 +71,7 @@ namespace KeyboardGestures.Core.Gestures
 
         private void HandleKeyUp(int vk)
         {
-            vk = NormalizeCtrl(vk);
+            vk = NormalizeKey(vk);
             _pressedKeys.Remove(vk);
             if(vk == _settings.ActivationKey)
             {
@@ -103,7 +103,7 @@ namespace KeyboardGestures.Core.Gestures
             SequenceCompleted?.Invoke( seq );
         }
 
-        private static int NormalizeCtrl(int vk)
+        public static int NormalizeKey(int vk)
         {
             return vk switch
             {

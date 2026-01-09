@@ -8,10 +8,10 @@ namespace KeyboardGestures.UI.Services
         private readonly AppSettingsStorage _storage;
         public AppSettings Current { get; }
 
-        public AppSettingsService(AppSettingsStorage storage)
+        public AppSettingsService(AppSettings settings, AppSettingsStorage storage)
         {
             _storage = storage;
-            Current = _storage.Load() ?? new AppSettings();
+            Current = settings;
         }
 
         public void Save()
