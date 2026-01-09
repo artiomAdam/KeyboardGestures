@@ -29,7 +29,6 @@ namespace KeyboardGestures.App
 
         private void OnTrayClicked(object? sender, EventArgs e)
         {
-            Debug.WriteLine("TrayClick");
             if(_menuWindow is TrayMenuWindow tray)
             {
 

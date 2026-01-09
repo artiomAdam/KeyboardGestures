@@ -57,8 +57,11 @@ namespace KeyboardGestures.UI.ViewModels
 
             ApplyCommand = ReactiveCommand.Create(() =>
             {
-                _settings.Current.ActivationKey = ActivationKey;
-                _settings.Save();
+                if (_settings.Current.ActivationKey != ActivationKey)
+                {
+                    _settings.Current.ActivationKey = ActivationKey;
+                    _settings.Save();
+                }
             });
 
             CancelCommand = ReactiveCommand.Create(() =>
