@@ -29,12 +29,10 @@ namespace KeyboardGestures.UI.ViewModels
                 }
             }
         }
-
-        public string ActivationKeyDisplay =>
-    _settings.Current.ActivationKey == 0 ? "—" : CommandDisplayHelper.ToDisplayName(ActivationKey);
+        public string ActivationKeyDisplay => _settings.Current.ActivationKey == 0 ? "—" : CommandDisplayHelper.ToDisplayName(ActivationKey);
 
 
-        // TODO: check this
+        // TODO: unimplemented placeholder feature
         public bool LaunchOnStartup
         {
             get => _settings.Current.LaunchOnStartup;
@@ -70,12 +68,6 @@ namespace KeyboardGestures.UI.ViewModels
                 // restore to prev?
                 ActivationKey = _settings.Current.ActivationKey;
             });
-        }
-
-        private static string KeyToDisplay(int vk)
-        {
-            // TODO: replace with proper key formatting later
-            return vk == 0 ? "" : ((char)vk).ToString().ToUpper();
         }
 
         private void OnKey(KeyEvent ev)
