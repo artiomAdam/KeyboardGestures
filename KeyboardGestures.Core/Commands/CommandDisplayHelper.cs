@@ -25,15 +25,21 @@
 
         private static readonly Dictionary<int, string> KnownNames = new()
         {
+
+
             { 0x20, "Space" },
             { 0x0D, "Enter" },
             { 0x08, "Backspace" },
             { 0x1B, "Esc" },
-            { 0xA0, "LShift" },
-            { 0xA1, "RShift" },
+            { 0x10, "Shift" },
+            { 0xA0, "Shift" },
+            { 0xA1, "Shift" },
+            { 0x11, "Ctrl" },
+            { 0xA2, "Ctrl" },
+            { 0xA3, "Ctrl" },
             { 0x12, "Alt" },
-            { 0xA4, "LAlt" },
-            { 0xA5, "RAlt" },
+            { 0xA4, "Alt" },
+            { 0xA5, "Alt" },
             { 0xBA, ";" },
             { 0xDE, "'" },
             { 0xC0, "`" },
