@@ -94,18 +94,36 @@
 
 						<!-- Activation Key -->
 						<Grid Classes="setting-row"
-							  ColumnDefinitions="*,Auto">
-							<StackPanel>
-								<TextBlock Text="Activation Key"
-										   Classes="setting-label"/>
-								<TextBlock Text="Single key used to activate the command overlay"
-										   Classes="setting-description"/>
-							</StackPanel>
+							  ColumnDefinitions="*,Auto"
+							  RowDefinitions="Auto,Auto">
 
-							<TextBox Classes="key-input"
+							<TextBlock Grid.Row="0"
+									   Grid.Column="0"
+									   Text="Activation Key"
+									   Classes="setting-label"/>
+
+							<TextBlock Grid.Row="1"
+									   Grid.Column="0"
+									   Text="Single key used to activate the command overlay"
+									   Classes="setting-description"/>
+
+							<TextBox Grid.Row="0"
+									 Grid.Column="1"
+									 Margin="12,0,0,0"
+									 Width="42"
+									 Height="28"
+									 VerticalAlignment="Center"
 									 Text="{Binding ActivationKeyDisplay}"
 									 IsReadOnly="True"
-									 Focusable="True"
+									 HorizontalContentAlignment="Center"
+									 VerticalContentAlignment="Center"
+									 FontSize="14"
+									 FontWeight="SemiBold"
+									 Background="#4022AA88"
+									 Foreground="Black"
+									 BorderBrush="#00FFD4"
+									 BorderThickness="1"
+									 CornerRadius="6"
 									 GotFocus="OnActivationKeyFocus"
 									 LostFocus="OnActivationKeyLostFocus"/>
 						</Grid>
