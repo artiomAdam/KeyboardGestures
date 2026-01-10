@@ -7,7 +7,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	  <ApplicationIcon>Assets/app.ico</ApplicationIcon>
+	  <ApplicationIcon>Assets/app_v2.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,6 +26,10 @@
 	<ItemGroup>
 		<AvaloniaResource Include="Assets/icon.png" />
 	</ItemGroup>
+
+	<!--<ItemGroup>
+	  <Content Include="Assets/app2.ico" />
+	</ItemGroup> -->
 
 	<ItemGroup>
 	  <ProjectReference Include="..\KeyboardGestures.Core\KeyboardGestures.Core.csproj" />

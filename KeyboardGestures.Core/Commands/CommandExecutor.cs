@@ -12,7 +12,6 @@ namespace KeyboardGestures.Core.Commands
         }
         public void Execute(CommandDefinition cmd)
         {
-            Debug.WriteLine($"Execution action: {cmd.CommandType}");
 
             switch (cmd.CommandType)
             {
