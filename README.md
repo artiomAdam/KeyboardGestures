@@ -25,7 +25,6 @@ It listens for key sequences and runs actions such as launching apps, opening UR
 * C#/.NET 8
 * Avalonia UI
 * Win32 APIs (global keyboard hook)
-* Microsoft.Extensions.DependencyInjection
 
 ## Download
 
