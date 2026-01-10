@@ -131,7 +131,7 @@
 						<Separator/>
 
 						<!-- Launch on startup -->
-						<Grid Classes="setting-row"
+						<!--<Grid Classes="setting-row"
 							  ColumnDefinitions="*,Auto">
 							<StackPanel>
 								<TextBlock Text="Launch on startup"
@@ -144,7 +144,7 @@
 									  IsChecked="{Binding LaunchOnStartup}"/>
 						</Grid>
 
-						<Separator/>
+						<Separator/> -->
 
 					</StackPanel>
 				</ScrollViewer>
